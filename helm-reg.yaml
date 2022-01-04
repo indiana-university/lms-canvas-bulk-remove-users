@@ -1,0 +1,16 @@
+
+projectedSecret:
+  - secret:
+      name: "properties-2021-05-10"
+
+image:
+  tag: unstable-reg
+
+env:
+  APP_ENV: reg
+
+ingress:
+  enabled: true
+  hosts:
+    - host: "microservices-template-reg.apps-test.iu.edu"
+      paths: []

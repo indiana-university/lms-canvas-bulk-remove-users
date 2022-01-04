@@ -1,0 +1,16 @@
+
+projectedSecret:
+  - secret:
+      name: "properties-2021-05-10"
+
+image:
+  tag: unstable-snd
+
+env:
+  APP_ENV: snd
+
+ingress:
+  enabled: true
+  hosts:
+    - host: "microservices-template-snd.apps-snd.iu.edu"
+      paths: []

@@ -1,0 +1,18 @@
+
+projectedSecret:
+  - secret:
+      name: "properties-2021-05-10"
+  - secret:
+      name: "lms-security-properties-20201014"
+
+image:
+  tag: stable
+
+env:
+  APP_ENV: prd
+
+ingress:
+  enabled: true
+  hosts:
+    - host: "microservices-template.apps.iu.edu"
+      paths: []
