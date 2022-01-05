@@ -1,6 +1,6 @@
 spring:
   application:
-    name: microservices-template
+    name: bulk-remove-users
   profiles:
     active: redis
   session:
@@ -13,7 +13,8 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: ${oauth.tokenprovider.url}/.well-known/jwks.json
-microservices-template:
+
+bulk-remove-users:
   version: @app.version@
   env: ${app.env}
 
@@ -31,4 +32,4 @@ spring:
   profiles: redis
   session:
     store-type: redis
-    redis.namespace: microservices-template-${app.version}:session
+    redis.namespace: bulk-remove-users-${app.version}:session

@@ -1,4 +1,4 @@
-package edu.iu.uits.lms.microservicestemplate.controller;
+package edu.iu.uits.lms.bulkremoveusers.controller;
 
 import canvas.helpers.CanvasConstants;
 import edu.iu.uits.lms.lti.LTIConstants;
@@ -24,7 +24,7 @@ import java.util.Map;
 @Controller
 @RequestMapping({"/lti"})
 @Slf4j
-public class MicroservicesTemplateLtiController extends LtiController {
+public class BulkRemoveUsersLtiController extends LtiController {
 
     private boolean openLaunchUrlInNewWindow = false;
 
@@ -76,7 +76,7 @@ public class MicroservicesTemplateLtiController extends LtiController {
 
     @Override
     protected String getToolContext() {
-        return "microservices-template";
+        return "bulk-remove-users";
     }
 
     @Override

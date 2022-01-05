@@ -1,9 +1,9 @@
-nameOverride: microservices-template
+nameOverride: bulk-remove-users
 
 namespace: ua-vpit--enterprise-systems--lms
 
 image:
-  repository: registry.docker.iu.edu/lms/microservices-template
+  repository: registry.docker.iu.edu/lms/bulk-remove-users
   tag: unstable
   pullPolicy: Always
 
@@ -26,6 +26,9 @@ imagePullSecrets:
 javaOpts: "-XX:MaxRAMPercentage=90 -XshowSettings:vm"
 
 activeProfiles: "redis"
+
+vault:
+  enabled: true
 
 service:
   type: ClusterIP

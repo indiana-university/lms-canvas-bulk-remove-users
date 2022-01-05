@@ -1,7 +1,7 @@
 
 projectedSecret:
   - secret:
-      name: "properties-2021-05-10"
+      name: "properties-2021-06-07"
   - secret:
       name: "lms-security-properties-20201014"
 
@@ -11,8 +11,14 @@ image:
 env:
   APP_ENV: prd
 
+activeProfiles: "redis,prd"
+
+serviceAccountName: bulk-remove-users-prd
+
+cluster: es-prod
+
 ingress:
   enabled: true
   hosts:
-    - host: "microservices-template.apps.iu.edu"
+    - host: "bulk-remove-users.apps.iu.edu"
       paths: []

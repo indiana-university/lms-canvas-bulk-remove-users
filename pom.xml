@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>microservices-template</artifactId>
+    <artifactId>bulk-remove-users</artifactId>
     <packaging>jar</packaging>
-    <name>microservices-template</name>
+    <name>bulk-remove-users</name>
     <version>4.0.0-SNAPSHOT</version>
 
     <parent>
         <artifactId>lms2Wow</artifactId>
         <groupId>edu.iu.uits.lms</groupId>
-        <version>4.0.11</version>
+        <version>4.0.12</version>
         <relativePath />
     </parent>
 
@@ -17,11 +17,11 @@
         <app.version>${project.version}</app.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-io.version>2.8.0</commons-io.version>
-        <docker_repository_name>microservices-template</docker_repository_name>
+        <docker_repository_name>bulk-remove-users</docker_repository_name>
         <docker_tag>stable</docker_tag>
-        <helm_service_name>microservices-template</helm_service_name>
+        <helm_service_name>bulk-remove-users</helm_service_name>
         <jquery.version>3.5.1</jquery.version>
-        <lms-bom.version>4.0.13</lms-bom.version>
+        <lms-bom.version>4.0.31</lms-bom.version>
     </properties>
 
     <dependencyManagement>
@@ -75,6 +75,10 @@
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-vault-config</artifactId>
+        </dependency>
+        <dependency>
             <groupId>edu.iu.uits.lms</groupId>
             <artifactId>lms-lti-web</artifactId>
         </dependency>
@@ -122,7 +126,7 @@
 
 
     <build>
-        <finalName>microservices-template</finalName>
+        <finalName>bulk-remove-users</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -162,7 +166,7 @@
                         <param>postgresql9</param>
                     </dialects>
                     <packages>
-                        <param>edu.iu.uits.lms.microservices-template</param>
+                        <param>edu.iu.uits.lms.bulk-remove-users</param>
                     </packages>
 <!--                    <persistenceXml>src/main/webapp/META-INF/canvasnotifier-persistence.xml</persistenceXml>-->
                 </configuration>
