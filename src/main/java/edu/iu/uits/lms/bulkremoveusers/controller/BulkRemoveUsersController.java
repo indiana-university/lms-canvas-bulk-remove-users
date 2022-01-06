@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/app")
 @Slf4j
-public class ToolController extends LtiAuthenticationTokenAwareController {
+public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareController {
 
    @Autowired
    private ToolConfig toolConfig = null;

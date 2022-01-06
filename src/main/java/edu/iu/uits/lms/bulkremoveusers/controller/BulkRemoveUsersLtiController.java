@@ -1,6 +1,6 @@
 package edu.iu.uits.lms.bulkremoveusers.controller;
 
-import canvas.helpers.CanvasConstants;
+import edu.iu.uits.lms.canvas.helpers.CanvasConstants;
 import edu.iu.uits.lms.lti.LTIConstants;
 import edu.iu.uits.lms.lti.controller.LtiController;
 import edu.iu.uits.lms.lti.security.LtiAuthenticationProvider;

@@ -1,6 +1,6 @@
 package edu.iu.uits.lms.bulkremoveusers;
 
-import canvas.config.EnableCanvasClient;
+import edu.iu.uits.lms.canvas.config.EnableCanvasClient;
 import edu.iu.uits.lms.common.samesite.EnableCookieFilter;
 import edu.iu.uits.lms.common.server.GitRepositoryState;
 import edu.iu.uits.lms.common.server.ServerInfo;
@@ -21,8 +21,6 @@ import java.util.Date;
 
 @SpringBootApplication
 @EnableGlobalErrorHandler
-@PropertySource(value = {"classpath:env.properties",
-      "${app.fullFilePath}/security.properties"}, ignoreResourceNotFound = true)
 @Slf4j
 @EnableRedisConfiguration
 @EnableCookieFilter(ignoredRequestPatterns = {"/rest/**"})

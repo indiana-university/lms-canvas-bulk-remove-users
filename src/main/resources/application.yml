@@ -1,19 +1,34 @@
 spring:
   application:
     name: bulk-remove-users
-  profiles:
-    active: redis
   session:
     store-type: none
-#  output:
-#    ansi:
-#      enabled: ALWAYS
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          jwk-set-uri: ${oauth.tokenprovider.url}/.well-known/jwks.json
-
+  config.import: optional:${app.fullFilePath}/${app.overridesFileName}, optional:${app.fullFilePath}/security.properties, classpath:canvas.properties, optional:classpath:git.properties
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        temp:
+          use_jdbc_metadata_defaults: false
+      jadira:
+        usertype:
+          autoRegisterUserTypes: true
+  datasource:
+    driverClassName: ${lms.db.driverClass}
+    url: ${lms.db.url}
+    username: ${lms.db.user}
+    password: ${lms.db.password}
+    type: org.springframework.jdbc.datasource.DriverManagerDataSource
+  cloud.vault.enabled: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 bulk-remove-users:
   version: @app.version@
   env: ${app.env}
@@ -26,10 +41,38 @@ server:
     session:
       timeout: 30m
 
+app:
+  env: dev
+  fullFilePath: file:/usr/src/app/config
+  overridesFileName: overrides.properties
+
+management:
+  endpoint.info.enabled: true
+  endpoints.web.exposure.include: health,info
+  health.redis.enabled: false
 ---
 
 spring:
-  profiles: redis
+  config.activate.on-profile: redis-session
   session:
     store-type: redis
     redis.namespace: bulk-remove-users-${app.version}:session
+management.health.redis.enabled: true
+
+---
+
+spring:
+  config:
+    activate.on-profile: vault
+    import: vault://
+  #  cloud.bootstrap.enabled: true
+  cloud.vault:
+    enabled: true
+    config:
+      lifecycle.lease-endpoints: sysleases
+    generic:
+      enabled: false
+    kv:
+      enabled: true
+      backend: ua-vpit/enterprise-systems/lms/kv
+      application-name: bulk-remove-users
