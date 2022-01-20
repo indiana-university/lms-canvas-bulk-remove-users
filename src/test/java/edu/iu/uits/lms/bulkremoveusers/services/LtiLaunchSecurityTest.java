@@ -1,11 +1,12 @@
 package edu.iu.uits.lms.bulkremoveusers.services;
 
+import edu.iu.uits.lms.bulkremoveusers.config.ToolConfig;
+import edu.iu.uits.lms.bulkremoveusers.controller.BulkRemoveUsersLtiController;
 import edu.iu.uits.lms.canvas.config.CanvasClientTestConfig;
+import edu.iu.uits.lms.iuonly.IuClientTestConfig;
 import edu.iu.uits.lms.lti.config.LtiClientTestConfig;
 import edu.iu.uits.lms.lti.model.LmsLtiAuthz;
 import edu.iu.uits.lms.lti.service.LtiAuthorizationServiceImpl;
-import edu.iu.uits.lms.bulkremoveusers.config.ToolConfig;
-import edu.iu.uits.lms.bulkremoveusers.controller.BulkRemoveUsersLtiController;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
 import net.oauth.OAuthException;
@@ -38,7 +39,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(BulkRemoveUsersLtiController.class)
-@Import({ToolConfig.class, CanvasClientTestConfig.class, LtiClientTestConfig.class})
+@Import({ToolConfig.class, CanvasClientTestConfig.class, LtiClientTestConfig.class, IuClientTestConfig.class})
 public class LtiLaunchSecurityTest {
 
    @Autowired
