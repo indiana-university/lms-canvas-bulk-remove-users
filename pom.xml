@@ -73,11 +73,12 @@
         <jdk.source>11</jdk.source>
         <jdk.target>11</jdk.target>
         <jquery.version>3.5.1</jquery.version>
-        <lms-canvas-services.version>5.0.1</lms-canvas-services.version>
-        <lms-canvas-common-configuration.version>5.0.1</lms-canvas-common-configuration.version>
-        <lms-canvas-lti-framework.version>5.0.2</lms-canvas-lti-framework.version>
+        <lms-canvas-services.version>5.0.3-SNAPSHOT</lms-canvas-services.version>
+        <lms-canvas-common-configuration.version>5.0.2</lms-canvas-common-configuration.version>
+        <lms-canvas-lti-framework.version>5.0.3</lms-canvas-lti-framework.version>
         <lms-canvas-rivet.version>5.1.8.2_1</lms-canvas-rivet.version>
-        <lms-canvas-redis-config.version>5.0.6</lms-canvas-redis-config.version>
+        <lms-canvas-redis-config.version>5.0.7</lms-canvas-redis-config.version>
+        <lms-iuonly-impl.version>5.0.0</lms-iuonly-impl.version>
         <select2.version>4.0.13</select2.version>
         <spring-cloud-starter-parent.version>2020.0.3</spring-cloud-starter-parent.version>
         <tinymce.version>5.0.9</tinymce.version>
@@ -168,6 +169,11 @@
             <groupId>edu.iu.uits.lms</groupId>
             <artifactId>lms-canvas-redis-config</artifactId>
             <version>${lms-canvas-redis-config.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.iu.uits.lms</groupId>
+            <artifactId>lms-iuonly-impl</artifactId>
+            <version>${lms-iuonly-impl.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
