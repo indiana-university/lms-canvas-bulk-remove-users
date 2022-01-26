@@ -10,6 +10,7 @@
     <!-- alerts section -->
     <div th:if="${success}" class="rvt-alert rvt-alert--success rvt-m-top-sm" role="alertdialog" aria-labelledby="success-alert-title-edit">
         <h1 class="rvt-alert__title" id="success-alert-title-edit">Users successfully removed</h1>
+        <p class="rvt-alert__message">You may return to the <a th:href="${peopleToolUrl}">People tool</a>.</p>
         <button type="button" class="rvt-alert__dismiss" data-alert-close>
             <span class="v-hide">Dismiss this alert</span>
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
@@ -46,7 +47,7 @@
     </div>
 
     <span th:if="not ${finalEnrollmentList.isEmpty()}">SIS-enrolled users are not listed and cannot be removed with this tool.</span>
-    <form th:if="not ${finalEnrollmentList.isEmpty()}" th:action="@{|/app/remove/${courseId}|}" method="post">
+    <form th:if="not ${finalEnrollmentList.isEmpty()}" id="bulk-remove-users-form" th:action="@{|/app/remove/${courseId}|}" method="post">
         <div class="rvt-box rvt-m-top-sm">
             <div class="rvt-box__row">
                 <fieldset>
@@ -86,7 +87,7 @@
             </div>
         </div>
         <div class="rvt-m-top-md">
-            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-modal-trigger="edit-tool-properties" aria-describedby="users-selected">Remove selected users</button>
+            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-modal-trigger="edit-tool-properties" aria-describedby="users-selected" aria-disabled="true" disabled>Remove selected users</button>
             <span id="users-selected" aria-live="polite">0 selected</span>
         </div>
         <div>
@@ -105,21 +106,23 @@
                 <tr th:each="enrollmentDisplay : ${finalEnrollmentList}">
                     <th scope="row" class="checkboxColumn">
                         <input type="checkbox" name="user" th:id="|checkbox-${enrollmentDisplay.enrollmentId}|"
-                            th:data-attribute="${enrollmentDisplay.role}" th:value="${enrollmentDisplay.enrollmentId}" />
+                            th:data-attribute="${enrollmentDisplay.baseRole}"
+                            th:dupe-attribute="${#arrays.contains(dupeUsernames, enrollmentDisplay.username)}"
+                            th:value="${enrollmentDisplay.enrollmentId}" />
                         <label th:for="|checkbox-${enrollmentDisplay.enrollmentId}|" class="labeloverride">
                             <span class="sr-only" th:text="|Select ${enrollmentDisplay.displayName}|">Select Banner, Bruce</span>
                         </label>
                     </th>
                     <td th:text="${enrollmentDisplay.displayName}" class="displayName">Banner, Bruce</td>
                     <td th:text="${enrollmentDisplay.username}" class="username">bbanner</td>
-                    <td th:text="${enrollmentDisplay.role}">Teacher</td>
-                    <td th:text="${enrollmentDisplay.sectionName}">FA21-BL-CHEM-A123-12345</td>
+                    <td th:text="${enrollmentDisplay.role}" class="role">Teacher</td>
+                    <td th:text="${enrollmentDisplay.sectionName}" class="section">FA21-BL-CHEM-A123-12345</td>
                 </tr>
                 </tbody>
             </table>
         </div>
         <div class="rvt-m-top-md">
-            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-modal-trigger="edit-tool-properties" aria-describedby="users-selected">Remove selected users</button>
+            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-modal-trigger="edit-tool-properties" aria-describedby="users-selected" aria-disabled="true" disabled>Remove selected users</button>
         </div>
 
         <!-- dialog box -->
@@ -136,16 +139,13 @@
                 </header>
                 <div class="rvt-modal__body rvt-modal__body-override">
                     <p class="rvt-text-bold">Are you sure you want to remove these users?</p>
-                    <ul class="rvt-plain-list modal-list">
-                        <!--                    <li>Murdock, Matt (mmurdock)</li>-->
-                        <!--                    <li>Parker, Peter (pparker) - TA (FA21-BL-CHEM-A123-12345)</li>-->
-                        <!--                    <li>Parker, Peter (pparker) - Student (FA21-BL-CHEM-A123-54321)</li>-->
-                        <!--                    <li>Quill, Peter (pquill)</li>-->
-                    </ul>
+                    <ul class="rvt-plain-list modal-list"></ul>
                 </div>
                 <div class="rvt-modal__controls">
-                    <button type="submit" class="rvt-button">Yes, remove</button>
-                    <button type="button" class="rvt-button rvt-button--secondary" data-modal-close="edit-tool-properties">Cancel</button>
+                    <button id="dialog-submit" type="submit" class="rvt-button">
+                        <span class="rvt-button__content">Yes, remove</span>
+                    </button>
+                    <button id="dialog-cancel" type="button" class="rvt-button rvt-button--secondary" data-modal-close="edit-tool-properties">Cancel</button>
                 </div>
             </div>
         </div>

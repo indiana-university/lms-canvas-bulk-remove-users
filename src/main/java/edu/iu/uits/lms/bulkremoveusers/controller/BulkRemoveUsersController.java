@@ -4,13 +4,13 @@ import edu.iu.uits.lms.canvas.model.CanvasRole;
 import edu.iu.uits.lms.canvas.model.Enrollment;
 import edu.iu.uits.lms.canvas.model.Section;
 import edu.iu.uits.lms.canvas.services.AccountService;
+import edu.iu.uits.lms.canvas.services.CanvasService;
 import edu.iu.uits.lms.canvas.services.CourseService;
 import edu.iu.uits.lms.canvas.services.SectionService;
 import edu.iu.uits.lms.iuonly.services.SudsServiceImpl;
+import edu.iu.uits.lms.lti.LTIConstants;
 import edu.iu.uits.lms.lti.controller.LtiAuthenticationTokenAwareController;
-import edu.iu.uits.lms.lti.security.LtiAuthenticationProvider;
 import edu.iu.uits.lms.lti.security.LtiAuthenticationToken;
-import edu.iu.uits.lms.bulkremoveusers.config.ToolConfig;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +36,10 @@ import java.util.stream.Collectors;
 public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareController {
 
    @Autowired
-   private ToolConfig toolConfig = null;
+   private AccountService accountService = null;
 
    @Autowired
-   private AccountService accountService = null;
+   private CanvasService canvasService = null;
 
    @Autowired
    private CourseService courseService = null;
@@ -51,18 +51,25 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
    private SudsServiceImpl sudsService = null;
 
    @RequestMapping("/index/{courseId}")
-   @Secured(LtiAuthenticationProvider.LTI_USER_ROLE)
+   @Secured(LTIConstants.INSTRUCTOR_AUTHORITY)
    public ModelAndView index(@PathVariable("courseId") String courseId, Model model, HttpServletRequest request) {
       log.debug("in /index");
       LtiAuthenticationToken token = getValidatedToken(courseId);
       model.addAttribute("courseId", courseId);
 
+      // add a link to the People tool that is used in the success message alert
+      String peopleToolUrl = canvasService.getBaseUrl() + "/courses/" + courseId + "/users";
+      model.addAttribute("peopleToolUrl", peopleToolUrl);
+
+      // get the sections in the course and establish lists to track SIS vs non-SIS
       List<Section> rawSectionList = courseService.getCourseSections(courseId);
       List<Section> sisSectionList = new ArrayList<>();
       List<Section> nonSisSectionList = new ArrayList<>();
 
+      // the final, curated list of enrollments to display in the tool
       List<EnrollmentDisplay> finalEnrollmentList = new ArrayList<>();
 
+      // loop through the sections
       for (Section section : rawSectionList) {
          // see if the section has a sis id
          if (section.getSis_section_id() != null && !section.getSis_section_id().isEmpty()) {
@@ -107,6 +114,7 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
                enrollmentDisplay.setDisplayName(enrollment.getUser().getSortableName());
                enrollmentDisplay.setUsername(enrollment.getUser().getLoginId());
                enrollmentDisplay.setRole(roleMap.get(enrollment.getRole()));
+               enrollmentDisplay.setBaseRole(enrollment.getType());
                enrollmentDisplay.setSectionName(sisSection.getName());
                finalEnrollmentList.add(enrollmentDisplay);
             }
@@ -129,6 +137,7 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
                enrollmentDisplay.setDisplayName(enrollment.getUser().getSortableName());
                enrollmentDisplay.setUsername(enrollment.getUser().getLoginId());
                enrollmentDisplay.setRole(roleMap.get(enrollment.getRole()));
+               enrollmentDisplay.setBaseRole(enrollment.getType());
                enrollmentDisplay.setSectionName(nonSisSection.getName());
                finalEnrollmentList.add(enrollmentDisplay);
             }
@@ -142,26 +151,41 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
 
       // get a distinct list of roles
       List<String> distinctRoles = finalEnrollmentList.stream()
-              .map(EnrollmentDisplay::getRole)
+              .map(EnrollmentDisplay::getBaseRole)
               .distinct().collect(Collectors.toList());
 
       // using the distinct list of roles, determine which checkboxes will be disabled
-      model.addAttribute("disableTeachers", !distinctRoles.contains("Teacher"));
-      model.addAttribute("disableStudents", !distinctRoles.contains("Student"));
-      model.addAttribute("disableTAs", !distinctRoles.contains("TA"));
-      model.addAttribute("disableDesigners", !distinctRoles.contains("Designer"));
-      model.addAttribute("disableObservers", !distinctRoles.contains("Observer"));
+      model.addAttribute("disableTeachers", !distinctRoles.contains("TeacherEnrollment"));
+      model.addAttribute("disableStudents", !distinctRoles.contains("StudentEnrollment"));
+      model.addAttribute("disableTAs", !distinctRoles.contains("TaEnrollment"));
+      model.addAttribute("disableDesigners", !distinctRoles.contains("DesignerEnrollment"));
+      model.addAttribute("disableObservers", !distinctRoles.contains("ObserverEnrollment"));
 
       // using this just for getting the roles and using them for an official count with the checkboxes at the top of the page
-      List<String> listOfRoles = finalEnrollmentList.stream().map(EnrollmentDisplay::getRole).collect(Collectors.toList());
+      List<String> listOfRoles = finalEnrollmentList.stream()
+              .map(EnrollmentDisplay::getBaseRole)
+              .collect(Collectors.toList());
 
       // count the amount of times each role occurs. This is used for checkboxes at the top of the page
       model.addAttribute("allUserCount", finalEnrollmentList.size());
-      model.addAttribute("teacherCount", Collections.frequency(listOfRoles, "Teacher"));
-      model.addAttribute("studentCount", Collections.frequency(listOfRoles, "Student"));
-      model.addAttribute("taCount", Collections.frequency(listOfRoles, "TA"));
-      model.addAttribute("designerCount", Collections.frequency(listOfRoles, "Designer"));
-      model.addAttribute("observerCount", Collections.frequency(listOfRoles, "Observer"));
+      model.addAttribute("teacherCount", Collections.frequency(listOfRoles, "TeacherEnrollment"));
+      model.addAttribute("studentCount", Collections.frequency(listOfRoles, "StudentEnrollment"));
+      model.addAttribute("taCount", Collections.frequency(listOfRoles, "TaEnrollment"));
+      model.addAttribute("designerCount", Collections.frequency(listOfRoles, "DesignerEnrollment"));
+      model.addAttribute("observerCount", Collections.frequency(listOfRoles, "ObserverEnrollment"));
+
+      // section for making a list of duplicate usernames. This is strictly used for the dialog box to give more precise information
+      List<String> usernameList = finalEnrollmentList.stream()
+              .map(EnrollmentDisplay::getUsername).collect(Collectors.toList());
+
+      // if a name occurs more than once, then there's a dupe
+      List<String> dupeUsernames = usernameList.stream()
+              .filter(e -> Collections.frequency(usernameList, e) > 1)
+              .distinct()
+              .collect(Collectors.toList());
+
+      // add the dupe usernames to model
+      model.addAttribute("dupeUsernames", dupeUsernames);
 
       // add the enrollments
       model.addAttribute("finalEnrollmentList", finalEnrollmentList);
@@ -170,7 +194,7 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
    }
 
    @RequestMapping("/remove/{courseId}")
-   @Secured(LtiAuthenticationProvider.LTI_USER_ROLE)
+   @Secured(LTIConstants.INSTRUCTOR_AUTHORITY)
    public ModelAndView remove(@RequestParam("user") List<String> userValues, @PathVariable("courseId") String courseId, Model model, HttpServletRequest request) {
       log.debug("in /remove");
       LtiAuthenticationToken token = getValidatedToken(courseId);
@@ -208,7 +232,7 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
    }
 
    /**
-    * Using this just to organize data display in an easier way
+    * Using this just to organize data to display in an easier way
     */
    @Data
    private class EnrollmentDisplay {
@@ -216,6 +240,7 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
       private String displayName;
       private String username;
       private String role;
+      private String baseRole;
       private String sectionName;
    }
 }

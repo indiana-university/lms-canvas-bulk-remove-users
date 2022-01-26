@@ -6,9 +6,7 @@ import edu.iu.uits.lms.canvas.config.CanvasClientTestConfig;
 import edu.iu.uits.lms.canvas.model.Course;
 import edu.iu.uits.lms.canvas.services.AccountService;
 import edu.iu.uits.lms.canvas.services.CourseService;
-import edu.iu.uits.lms.canvas.services.SectionService;
 import edu.iu.uits.lms.iuonly.IuClientTestConfig;
-import edu.iu.uits.lms.iuonly.services.SudsServiceImpl;
 import edu.iu.uits.lms.lti.LTIConstants;
 import edu.iu.uits.lms.lti.config.LtiClientTestConfig;
 import edu.iu.uits.lms.lti.security.LtiAuthenticationProvider;
@@ -18,7 +16,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -44,19 +41,10 @@ public class AppLaunchSecurityTest {
    private WebApplicationContext context;
 
    @MockBean
-   private MessageSource messageSource = null;
-
-   @MockBean
    private AccountService accountService = null;
 
    @MockBean
    private CourseService courseService = null;
-
-   @MockBean
-   private SectionService sectionService = null;
-
-   @MockBean
-   private SudsServiceImpl sudsService = null;
 
    @Test
    public void appNoAuthnLaunch() throws Exception {

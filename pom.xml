@@ -14,9 +14,9 @@
     </parent>
 
     <version>5.0.0-SNAPSHOT</version>
-<!--    <description>Shared services for the lms-canvas LTI tools around the LTI tool launch</description>-->
-<!--    <url>https://github.com/indiana-university/lms-canvas-multiclassmessenger</url>-->
-<!--    <inceptionYear>2015</inceptionYear>-->
+    <description>Tool that helps bulk remove non-SIS enrollments in Canvas</description>
+    <url>https://github.iu.edu/iu-uits-es/ess-lms-bulk-remove-users</url>
+    <inceptionYear>2022</inceptionYear>
 
     <organization>
         <name>Indiana University</name>
@@ -32,46 +32,31 @@
         </developer>
     </developers>
 
-    <issueManagement>
-        <system>GitHub</system>
-<!--        <url>https://github.com/indiana-university/lms-canvas-multiclassmessenger/issues</url>-->
-    </issueManagement>
-
-    <licenses>
-        <license>
-            <name>BSD 3-Clause License</name>
-            <url>https://opensource.org/licenses/BSD-3-Clause</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
+    <repositories>
+        <repository>
+            <id>IUMaven</id>
+            <name>IUMaven</name>
+            <url>https://uisapp2.iu.edu/nxs-prd/content/groups/public</url>
+        </repository>
+    </repositories>
 
     <distributionManagement>
         <repository>
-            <name>Sonatype OSS Repository</name>
-            <id>Sonatype-OSS</id>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+            <name>IU Maven Repository</name>
+            <id>IUMaven</id>
+            <url>https://uisapp2.iu.edu/nxs-prd/content/repositories/IUInternal</url>
         </repository>
-        <snapshotRepository>
-            <name>Sonatype OSS Snapshot Repository</name>
-            <id>Sonatype-OSS</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
     </distributionManagement>
-
-<!--    <scm>-->
-<!--        <connection>scm:git:https://github.com/indiana-university/lms-canvas-multiclassmessenger.git</connection>-->
-<!--        <developerConnection>scm:git:https://github.com/indiana-university/lms-canvas-multiclassmessenger.git</developerConnection>-->
-<!--        <url>https://github.com/indiana-university/lms-canvas-multiclassmessenger</url>-->
-<!--        <tag>HEAD</tag>-->
-<!--    </scm>-->
 
     <properties>
         <app.version>${project.version}</app.version>
         <git-commit-id-maven-plugin.version>5.0.0</git-commit-id-maven-plugin.version>
+        <gitflow-plugin.version>1.15.1</gitflow-plugin.version>
         <hibernate5-ddl-maven-plugin.version>2.3.0</hibernate5-ddl-maven-plugin.version>
         <java.version>11</java.version>
         <jdk.source>11</jdk.source>
         <jdk.target>11</jdk.target>
+        <jgitflow.version>1.0-m5.1</jgitflow.version>
         <jquery.version>3.5.1</jquery.version>
         <lms-canvas-services.version>5.0.3-SNAPSHOT</lms-canvas-services.version>
         <lms-canvas-common-configuration.version>5.0.2</lms-canvas-common-configuration.version>
@@ -81,8 +66,6 @@
         <lms-iuonly-impl.version>5.0.1-SNAPSHOT</lms-iuonly-impl.version>
         <select2.version>4.0.13</select2.version>
         <spring-cloud-starter-parent.version>2020.0.3</spring-cloud-starter-parent.version>
-        <tinymce.version>5.0.9</tinymce.version>
-        <webjars-locator.version>0.42</webjars-locator.version>
 
         <plugins.compiler.version>3.8.1</plugins.compiler.version>
         <plugins.gpg.version>1.6</plugins.gpg.version>
@@ -199,29 +182,14 @@
         <!-- Tool specific dependencies -->
         <dependency>
             <groupId>org.webjars</groupId>
-            <artifactId>webjars-locator</artifactId>
-            <version>${webjars-locator.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>${jquery.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>tinymce</artifactId>
-            <version>${tinymce.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>select2</artifactId>
-            <version>${select2.version}</version>
         </dependency>
     </dependencies>
 
 
     <build>
-        <finalName>lms-lti-multiclassmessenger</finalName>
+        <finalName>bulk-remove-users</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -283,39 +251,31 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>${plugins.license.version}</version>
+                <groupId>external.atlassian.jgitflow</groupId>
+                <artifactId>jgitflow-maven-plugin</artifactId>
+                <version>${jgitflow.version}</version>
+                <dependencies>
+                    <!-- https://ecosystem.atlassian.net/browse/MJF-299 -->
+                    <!-- 2018-10-16: Must have been a recent change to github.iu.edu that removed support for a security algorithm -->
+                    <!-- Adding in an updated dependency to help -->
+                    <dependency>
+                        <groupId>com.jcraft</groupId>
+                        <artifactId>jsch</artifactId>
+                        <version>0.1.55</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
-                    <licenseName>bsd_3</licenseName>
-                    <failOnMissingHeader>true</failOnMissingHeader>
-                    <failOnNotUptodateHeader>true</failOnNotUptodateHeader>
-                    <excludes>
-                        <exclude>**/env.properties</exclude>
-                        <exclude>**/messages.properties</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>${plugins.nexus-staging.version}</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>Sonatype-OSS</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>${plugins.release.version}</version>
-                <configuration>
+                    <!-- see goals wiki page for configuration options -->
                     <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <useReleaseProfile>false</useReleaseProfile>
-                    <releaseProfiles>release</releaseProfiles>
-                    <goals>deploy</goals>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.amashchenko.maven.plugin</groupId>
+                <artifactId>gitflow-maven-plugin</artifactId>
+                <version>${gitflow-plugin.version}</version>
+                <configuration>
+                    <!-- see goals wiki page for configuration options -->
+                    <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
                 </configuration>
             </plugin>
         </plugins>
@@ -335,55 +295,5 @@
             </resource>
         </resources>
     </build>
-
-    <profiles>
-        <profile>
-            <id>release</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-source-plugin</artifactId>
-                        <version>${plugins.source.version}</version>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <goals>
-                                    <goal>jar-no-fork</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>${plugins.javadoc.version}</version>
-                        <executions>
-                            <execution>
-                                <id>attach-javadocs</id>
-                                <goals>
-                                    <goal>jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>${plugins.gpg.version}</version>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>
