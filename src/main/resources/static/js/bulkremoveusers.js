@@ -1,6 +1,11 @@
 $('#checkbox-all').change(function() {
     var checkboxes = $(this).closest('form').find(':checkbox');
     checkboxes.prop('checked', $(this).is(':checked'));
+    $("#checkbox-teachers").prop("indeterminate", false);
+    $("#checkbox-students").prop("indeterminate", false);
+    $("#checkbox-tas").prop("indeterminate", false);
+    $("#checkbox-designers").prop("indeterminate", false);
+    $("#checkbox-observers").prop("indeterminate", false);
     userSelectedCounter();
 });
 
@@ -155,7 +160,7 @@ $(".modalButton").click(function() {
             var displayName = $(this).closest('tr').find('.displayName').text();
             var username = $(this).closest('tr').find('.username').text();
             var dupeBonus = "";
-            var isDupe = (this.getAttribute('dupe-attribute') === 'true');
+            var isDupe = (this.getAttribute('data-is-dupe') === 'true');
             if (isDupe) {
                 separator = " - ";
                 var role = $(this).closest('tr').find('.role').text();

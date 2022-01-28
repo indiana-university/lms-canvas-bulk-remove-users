@@ -18,7 +18,7 @@
             </svg>
         </button>
     </div>
-    <div th:if="${errors}" class="rvt-alert rvt-alert--danger rvt-m-top-sm" role="alert" aria-labelledby="error-alert-title">
+    <div th:if="${errors}" class="rvt-alert rvt-alert--danger rvt-m-top-sm" role="alertdialog" aria-labelledby="error-alert-title">
         <h1 class="rvt-alert__title" id="error-alert-title">Error</h1>
         <p class="rvt-alert__message">There was an issue removing users. Please try again.</p>
         <button type="button" class="rvt-alert__dismiss" data-alert-close>
@@ -107,7 +107,7 @@
                     <th scope="row" class="checkboxColumn">
                         <input type="checkbox" name="user" th:id="|checkbox-${enrollmentDisplay.enrollmentId}|"
                             th:data-attribute="${enrollmentDisplay.baseRole}"
-                            th:dupe-attribute="${#arrays.contains(dupeUsernames, enrollmentDisplay.username)}"
+                            th:data-is-dupe="${#arrays.contains(dupeUsernames, enrollmentDisplay.username)}"
                             th:value="${enrollmentDisplay.enrollmentId}" />
                         <label th:for="|checkbox-${enrollmentDisplay.enrollmentId}|" class="labeloverride">
                             <span class="sr-only" th:text="|Select ${enrollmentDisplay.displayName}|">Select Banner, Bruce</span>

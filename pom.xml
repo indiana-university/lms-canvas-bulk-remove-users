@@ -58,12 +58,12 @@
         <jdk.target>11</jdk.target>
         <jgitflow.version>1.0-m5.1</jgitflow.version>
         <jquery.version>3.5.1</jquery.version>
-        <lms-canvas-services.version>5.0.3-SNAPSHOT</lms-canvas-services.version>
+        <lms-canvas-services.version>5.0.3</lms-canvas-services.version>
         <lms-canvas-common-configuration.version>5.0.2</lms-canvas-common-configuration.version>
-        <lms-canvas-lti-framework.version>5.0.4-SNAPSHOT</lms-canvas-lti-framework.version>
+        <lms-canvas-lti-framework.version>5.0.4</lms-canvas-lti-framework.version>
         <lms-canvas-rivet.version>5.1.8.2_1</lms-canvas-rivet.version>
         <lms-canvas-redis-config.version>5.0.7</lms-canvas-redis-config.version>
-        <lms-iuonly-impl.version>5.0.1-SNAPSHOT</lms-iuonly-impl.version>
+        <lms-iuonly-impl.version>5.0.1</lms-iuonly-impl.version>
         <spring-cloud-starter-parent.version>2020.0.3</spring-cloud-starter-parent.version>
         <webjars-locator.version>0.42</webjars-locator.version>
 

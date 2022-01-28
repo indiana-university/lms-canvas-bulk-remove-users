@@ -1,5 +1,6 @@
 package edu.iu.uits.lms.bulkremoveusers.controller;
 
+import edu.iu.uits.lms.canvas.helpers.EnrollmentHelper;
 import edu.iu.uits.lms.canvas.model.CanvasRole;
 import edu.iu.uits.lms.canvas.model.Enrollment;
 import edu.iu.uits.lms.canvas.model.Section;
@@ -155,11 +156,11 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
               .distinct().collect(Collectors.toList());
 
       // using the distinct list of roles, determine which checkboxes will be disabled
-      model.addAttribute("disableTeachers", !distinctRoles.contains("TeacherEnrollment"));
-      model.addAttribute("disableStudents", !distinctRoles.contains("StudentEnrollment"));
-      model.addAttribute("disableTAs", !distinctRoles.contains("TaEnrollment"));
-      model.addAttribute("disableDesigners", !distinctRoles.contains("DesignerEnrollment"));
-      model.addAttribute("disableObservers", !distinctRoles.contains("ObserverEnrollment"));
+      model.addAttribute("disableTeachers", !distinctRoles.contains(EnrollmentHelper.TYPE_TEACHER));
+      model.addAttribute("disableStudents", !distinctRoles.contains(EnrollmentHelper.TYPE_STUDENT));
+      model.addAttribute("disableTAs", !distinctRoles.contains(EnrollmentHelper.TYPE_TA));
+      model.addAttribute("disableDesigners", !distinctRoles.contains(EnrollmentHelper.TYPE_DESIGNER));
+      model.addAttribute("disableObservers", !distinctRoles.contains(EnrollmentHelper.TYPE_OBSERVER));
 
       // using this just for getting the roles and using them for an official count with the checkboxes at the top of the page
       List<String> listOfRoles = finalEnrollmentList.stream()
@@ -168,11 +169,11 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
 
       // count the amount of times each role occurs. This is used for checkboxes at the top of the page
       model.addAttribute("allUserCount", finalEnrollmentList.size());
-      model.addAttribute("teacherCount", Collections.frequency(listOfRoles, "TeacherEnrollment"));
-      model.addAttribute("studentCount", Collections.frequency(listOfRoles, "StudentEnrollment"));
-      model.addAttribute("taCount", Collections.frequency(listOfRoles, "TaEnrollment"));
-      model.addAttribute("designerCount", Collections.frequency(listOfRoles, "DesignerEnrollment"));
-      model.addAttribute("observerCount", Collections.frequency(listOfRoles, "ObserverEnrollment"));
+      model.addAttribute("teacherCount", Collections.frequency(listOfRoles, EnrollmentHelper.TYPE_TEACHER));
+      model.addAttribute("studentCount", Collections.frequency(listOfRoles, EnrollmentHelper.TYPE_STUDENT));
+      model.addAttribute("taCount", Collections.frequency(listOfRoles, EnrollmentHelper.TYPE_TA));
+      model.addAttribute("designerCount", Collections.frequency(listOfRoles, EnrollmentHelper.TYPE_DESIGNER));
+      model.addAttribute("observerCount", Collections.frequency(listOfRoles, EnrollmentHelper.TYPE_OBSERVER));
 
       // section for making a list of duplicate usernames. This is strictly used for the dialog box to give more precise information
       List<String> usernameList = finalEnrollmentList.stream()
