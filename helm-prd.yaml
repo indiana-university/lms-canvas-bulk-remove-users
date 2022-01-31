@@ -11,7 +11,7 @@ image:
 env:
   APP_ENV: prd
 
-activeProfiles: "redis,prd,vault"
+activeProfiles: "redis-session,prd,vault"
 
 serviceAccountName: bulk-remove-users-prd
 

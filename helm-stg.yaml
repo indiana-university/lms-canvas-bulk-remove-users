@@ -9,7 +9,7 @@ image:
 env:
   APP_ENV: stg
 
-activeProfiles: "redis,stg,vault"
+activeProfiles: "redis-session,stg,vault"
 
 serviceAccountName: bulk-remove-users-stg
 

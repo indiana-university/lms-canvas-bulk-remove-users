@@ -9,7 +9,7 @@ image:
 env:
   APP_ENV: reg
 
-activeProfiles: "redis,reg,vault"
+activeProfiles: "redis-session,reg,vault"
 
 serviceAccountName: bulk-remove-users-reg
 
