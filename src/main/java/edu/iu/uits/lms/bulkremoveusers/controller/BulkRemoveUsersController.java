@@ -94,6 +94,9 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
       // get the roleMap based on the course's accountId
       Map<String, String> roleMap = getCanvasRoleMap(courseService.getCourse(courseId).getAccountId());
 
+      // States of the desired enrollments
+      String[] states = {EnrollmentHelper.STATE.active.name(), EnrollmentHelper.STATE.invited.name()};
+
       // Rules for being a valid enrollment to display for removal
       // 1. Can not be the current user
       // 2. sis section, must be a null sis_import_id for the user to be eligible for removal
@@ -102,7 +105,7 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
       // loop through SIS sections for eligible enrollments to be removed
       for (Section sisSection : sisSectionList) {
 
-         List<Enrollment> sisSectionEnrollments = sectionService.getAllSectionEnrollmentsById(sisSection.getId());
+         List<Enrollment> sisSectionEnrollments = sectionService.getAllSectionEnrollmentsByIdAndState(sisSection.getId(), states);
 
          for (Enrollment enrollment : sisSectionEnrollments) {
             if (enrollment.getUser().getLoginId().equals(token.getPrincipal())) {
@@ -125,7 +128,7 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
       // loop through non-SIS sections for eligible enrollments to be removed
       for (Section nonSisSection : nonSisSectionList) {
 
-         List<Enrollment> nonSisSectionEnrollments = sectionService.getAllSectionEnrollmentsById(nonSisSection.getId());
+         List<Enrollment> nonSisSectionEnrollments = sectionService.getAllSectionEnrollmentsByIdAndState(nonSisSection.getId(), states);
 
          for (Enrollment enrollment : nonSisSectionEnrollments) {
             if (enrollment.getUser().getLoginId().equals(token.getPrincipal())) {
