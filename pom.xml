@@ -50,6 +50,9 @@
 
     <properties>
         <app.version>${project.version}</app.version>
+        <docker_repository_name>bulk-remove-users</docker_repository_name>
+        <docker_tag>stable</docker_tag>
+        <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
         <git-commit-id-maven-plugin.version>5.0.0</git-commit-id-maven-plugin.version>
         <gitflow-plugin.version>1.15.1</gitflow-plugin.version>
         <hibernate5-ddl-maven-plugin.version>2.3.0</hibernate5-ddl-maven-plugin.version>
@@ -300,5 +303,52 @@
             </resource>
         </resources>
     </build>
+
+    <profiles>
+        <profile>
+            <id>docker-push</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>dockerfile-maven-plugin</artifactId>
+                        <version>${dockerfile-maven-plugin.version}</version>
+                        <configuration>
+                            <repository>${docker_repository_base}${docker_repository_name}</repository>
+                            <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>build-latest</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                    <goal>tag</goal>
+                                    <goal>push</goal>
+                                </goals>
+                                <configuration>
+                                    <tag>${docker_tag}</tag>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>push-version</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>tag</goal>
+                                    <goal>push</goal>
+                                </goals>
+                                <configuration>
+                                    <tag>${project.version}</tag>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>
