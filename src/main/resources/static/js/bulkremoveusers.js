@@ -184,6 +184,6 @@ $('#dialog-submit').click(function() {
     $("#dialog-cancel").attr('disabled', '');
     $("#dialog-cancel").attr('aria-disabled', 'true');
 
-    // did not need this in testing, but leaving it in case it's a bug later
-    // $('#bulk-remove-users-form').submit();
+    // Some browsers need this to have submissions work correctly
+    $('#bulk-remove-users-form').submit();
 });
