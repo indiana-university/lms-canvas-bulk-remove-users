@@ -9,7 +9,7 @@ image:
 env:
   APP_ENV: snd
 
-activeProfiles: "redis,snd"
+activeProfiles: "redis-session,snd,vault"
 
 serviceAccountName: bulk-remove-users-snd
 

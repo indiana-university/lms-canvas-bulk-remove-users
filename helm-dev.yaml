@@ -20,7 +20,7 @@ service:
       protocol: TCP
       name: remote-debug
 
-activeProfiles: "dev"
+activeProfiles: "dev,vault"
 
 developmentMode: true
 

@@ -18,7 +18,9 @@ resources:
     memory: "1Gi"
 
 env:
-  JAVA_TOOL_OPTIONS: "-Dhttp.proxyHost=156.56.18.228 -Dhttp.proxyPort=8080 -Dhttps.proxyHost=156.56.18.228 -Dhttps.proxyPort=8443 -Dhttp.nonProxyHosts='localhost|127.0.0.1|*.iu.edu|*.iupui.edu|*.indiana.edu' -Dlogging.level.edu.iu.uits.lms=DEBUG"
+  # Can't just do iu.edu for a non-proxy host because the catalog url (expand.iu.edu) points to an external url and has to go through the proxy
+  JAVA_TOOL_OPTIONS: "-Dhttp.proxyHost=156.56.18.228 -Dhttp.proxyPort=8080 -Dhttps.proxyHost=156.56.18.228 -Dhttps.proxyPort=8443 -Dhttp.nonProxyHosts='localhost|127.0.0.1|apps.iu.edu|apps-test.iu.edu|*.uits.iu.edu|access.iu.edu|sisjee.iu.edu|sisjee-stage.iu.edu|sisjee-test.iu.edu|*.ait.iu.edu' -Dlogging.level.edu.iu.uits.lms=DEBUG"
+  APP_OVERRIDESFILENAME: "vault.properties"
 
 imagePullSecrets:
   - name: registry-prod
