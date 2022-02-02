@@ -99,8 +99,9 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
 
       // Rules for being a valid enrollment to display for removal
       // 1. Can not be the current user
-      // 2. sis section, must be a null sis_import_id for the user to be eligible for removal
-      // 3. non-sis section, all enrollments eligible for removal
+      // 2. Can not be a StudentViewEnrollment
+      // 3. sis section: Must be a null sis_import_id in the enrollment for the user to be eligible for removal
+      // 4. non-sis section: all enrollments eligible for removal
 
       // loop through SIS sections for eligible enrollments to be removed
       for (Section sisSection : sisSectionList) {
@@ -111,9 +112,9 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
             if (enrollment.getUser().getLoginId().equals(token.getPrincipal())) {
                // can't remove yourself, so move on!
                continue;
-            } else if (enrollment.getUser().getSisImportId() == null) {
+            } else if (enrollment.getSisImportId() == null) {
                // enrollment was not imported via SIS, so add them to the list!
-               if ("StudentViewEnrollment".equals(enrollment.getType())) {
+               if (EnrollmentHelper.TYPE_STUDENT_VIEW.equals(enrollment.getType())) {
                   // we do not care about this student view enrollment type, so skip it
                   continue;
                }
@@ -140,7 +141,7 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
                continue;
             } else {
                // all non-sis are eligible, except yourself. Add it!
-               if ("StudentViewEnrollment".equals(enrollment.getType())) {
+               if (EnrollmentHelper.TYPE_STUDENT_VIEW.equals(enrollment.getType())) {
                   // we do not care about this student view enrollment type, so skip it
                   continue;
                }
