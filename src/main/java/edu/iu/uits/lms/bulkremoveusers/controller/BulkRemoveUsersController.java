@@ -113,6 +113,10 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
                continue;
             } else if (enrollment.getUser().getSisImportId() == null) {
                // enrollment was not imported via SIS, so add them to the list!
+               if ("StudentViewEnrollment".equals(enrollment.getType())) {
+                  // we do not care about this student view enrollment type, so skip it
+                  continue;
+               }
                EnrollmentDisplay enrollmentDisplay = new EnrollmentDisplay();
                enrollmentDisplay.setEnrollmentId(enrollment.getId());
                enrollmentDisplay.setDisplayName(enrollment.getUser().getSortableName());
@@ -136,6 +140,10 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
                continue;
             } else {
                // all non-sis are eligible, except yourself. Add it!
+               if ("StudentViewEnrollment".equals(enrollment.getType())) {
+                  // we do not care about this student view enrollment type, so skip it
+                  continue;
+               }
                EnrollmentDisplay enrollmentDisplay = new EnrollmentDisplay();
                enrollmentDisplay.setEnrollmentId(enrollment.getId());
                enrollmentDisplay.setDisplayName(enrollment.getUser().getSortableName());
