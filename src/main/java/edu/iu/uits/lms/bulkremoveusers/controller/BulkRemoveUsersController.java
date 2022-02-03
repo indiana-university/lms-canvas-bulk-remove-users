@@ -52,6 +52,7 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
    private SudsServiceImpl sudsService = null;
 
    @RequestMapping("/loading/{courseId}")
+   @Secured(LTIConstants.INSTRUCTOR_AUTHORITY)
    public String loading(@PathVariable("courseId") String courseId, Model model) {
       model.addAttribute("courseId", courseId);
       model.addAttribute("hideFooter", true);
