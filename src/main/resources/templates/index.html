@@ -55,32 +55,32 @@
                     <ul class="rvt-inline-list">
                         <li>
                             <input type="checkbox" id="checkbox-all" />
-                            <label for="checkbox-all" class="rvt-m-right-xl" th:text="|All users (${allUserCount})|">All users (16)</label>
+                            <label for="checkbox-all" class="rvt-m-right-lg" th:text="|All users (${allUserCount})|">All users (16)</label>
                         </li>
                         <li>
                             <input type="checkbox" id="checkbox-teachers"
                                 th:disabled="${disableTeachers}" th:aria-disabled="${disableTeachers}" />
-                            <label for="checkbox-teachers" class="rvt-m-right-xl" th:text="|Teachers (${teacherCount})|">Teachers (3)</label>
+                            <label for="checkbox-teachers" class="rvt-m-right-lg" th:text="|Teachers (${teacherCount})|">Teachers (3)</label>
                         </li>
                         <li>
                             <input type="checkbox" id="checkbox-students"
                                th:disabled="${disableStudents}" th:aria-disabled="${disableStudents}" />
-                            <label for="checkbox-students" class="rvt-m-right-xl" th:text="|Students (${studentCount})|">Students (4)</label>
+                            <label for="checkbox-students" class="rvt-m-right-lg" th:text="|Students (${studentCount})|">Students (4)</label>
                         </li>
                         <li>
                             <input type="checkbox" id="checkbox-tas"
                                th:disabled="${disableTAs}" th:aria-disabled="${disableTAs}" />
-                            <label for="checkbox-tas" class="rvt-m-right-xl" th:text="|TAs (${taCount})|">TAs (3)</label>
+                            <label for="checkbox-tas" class="rvt-m-right-lg" th:text="|TAs (${taCount})|">TAs (3)</label>
                         </li>
                         <li>
                             <input type="checkbox" id="checkbox-designers"
                                th:disabled="${disableDesigners}" th:aria-disabled="${disableDesigners}" />
-                            <label for="checkbox-designers" class="rvt-m-right-xl" th:text="|Designers (${designerCount})|">Designers (3)</label>
+                            <label for="checkbox-designers" class="rvt-m-right-lg" th:text="|Designers (${designerCount})|">Designers (3)</label>
                         </li>
                         <li>
                             <input type="checkbox" id="checkbox-observers"
                                th:disabled="${disableObservers}" th:aria-disabled="${disableObservers}" />
-                            <label for="checkbox-observers" class="rvt-m-right-xl" th:text="|Observers (${observerCount})|">Observers (3)</label>
+                            <label for="checkbox-observers" class="rvt-m-right-lg" th:text="|Observers (${observerCount})|">Observers (3)</label>
                         </li>
                     </ul>
                 </fieldset>
@@ -91,7 +91,7 @@
             <span id="users-selected" aria-live="polite">0 selected</span>
         </div>
         <div>
-            <table class="rvt-table-cells rvt-m-top-md">
+            <table class="rvt-table-cells rvt-table-compact rvt-m-top-md">
                 <caption class="sr-only">Table with user information and checkboxes to select for removing them</caption>
                 <thead>
                 <tr>
