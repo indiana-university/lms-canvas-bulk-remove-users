@@ -51,6 +51,11 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
    @Autowired
    private SudsServiceImpl sudsService = null;
 
+   @RequestMapping(value = "/accessDenied")
+   public String accessDenied() {
+      return "accessDenied";
+   }
+
    @RequestMapping("/loading/{courseId}")
    @Secured(LTIConstants.INSTRUCTOR_AUTHORITY)
    public String loading(@PathVariable("courseId") String courseId, Model model) {
