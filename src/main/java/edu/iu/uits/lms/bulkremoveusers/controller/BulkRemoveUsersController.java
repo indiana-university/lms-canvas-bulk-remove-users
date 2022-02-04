@@ -51,6 +51,19 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
    @Autowired
    private SudsServiceImpl sudsService = null;
 
+   @RequestMapping(value = "/accessDenied")
+   public String accessDenied() {
+      return "accessDenied";
+   }
+
+   @RequestMapping("/loading/{courseId}")
+   @Secured(LTIConstants.INSTRUCTOR_AUTHORITY)
+   public String loading(@PathVariable("courseId") String courseId, Model model) {
+      model.addAttribute("courseId", courseId);
+      model.addAttribute("hideFooter", true);
+      return "loading";
+   }
+
    @RequestMapping("/index/{courseId}")
    @Secured(LTIConstants.INSTRUCTOR_AUTHORITY)
    public ModelAndView index(@PathVariable("courseId") String courseId, Model model, HttpServletRequest request) {
@@ -99,8 +112,9 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
 
       // Rules for being a valid enrollment to display for removal
       // 1. Can not be the current user
-      // 2. sis section, must be a null sis_import_id for the user to be eligible for removal
-      // 3. non-sis section, all enrollments eligible for removal
+      // 2. Can not be a StudentViewEnrollment
+      // 3. sis section: Must be a null sis_import_id in the enrollment for the user to be eligible for removal
+      // 4. non-sis section: all enrollments eligible for removal
 
       // loop through SIS sections for eligible enrollments to be removed
       for (Section sisSection : sisSectionList) {
@@ -111,8 +125,12 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
             if (enrollment.getUser().getLoginId().equals(token.getPrincipal())) {
                // can't remove yourself, so move on!
                continue;
-            } else if (enrollment.getUser().getSisImportId() == null) {
+            } else if (enrollment.getSisImportId() == null) {
                // enrollment was not imported via SIS, so add them to the list!
+               if (EnrollmentHelper.TYPE_STUDENT_VIEW.equals(enrollment.getType())) {
+                  // we do not care about this student view enrollment type, so skip it
+                  continue;
+               }
                EnrollmentDisplay enrollmentDisplay = new EnrollmentDisplay();
                enrollmentDisplay.setEnrollmentId(enrollment.getId());
                enrollmentDisplay.setDisplayName(enrollment.getUser().getSortableName());
@@ -136,6 +154,10 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
                continue;
             } else {
                // all non-sis are eligible, except yourself. Add it!
+               if (EnrollmentHelper.TYPE_STUDENT_VIEW.equals(enrollment.getType())) {
+                  // we do not care about this student view enrollment type, so skip it
+                  continue;
+               }
                EnrollmentDisplay enrollmentDisplay = new EnrollmentDisplay();
                enrollmentDisplay.setEnrollmentId(enrollment.getId());
                enrollmentDisplay.setDisplayName(enrollment.getUser().getSortableName());
