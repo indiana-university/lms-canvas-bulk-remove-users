@@ -1,7 +1,7 @@
 
 projectedSecret:
   - secret:
-      name: "properties-2021-05-10"
+      name: "properties-2021-06-07"
 
 image:
   tag: unstable-stg
@@ -9,8 +9,14 @@ image:
 env:
   APP_ENV: stg
 
+activeProfiles: "redis-session,stg,vault"
+
+serviceAccountName: bulk-remove-users-stg
+
+cluster: es-test
+
 ingress:
   enabled: true
   hosts:
-    - host: "microservices-template-stg.apps-test.iu.edu"
+    - host: "bulk-remove-users-stg.apps-test.iu.edu"
       paths: []
