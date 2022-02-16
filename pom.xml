@@ -13,7 +13,7 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
-    <version>5.0.0-SNAPSHOT</version>
+    <version>5.0.0</version>
     <description>Tool that helps bulk remove non-SIS enrollments in Canvas</description>
     <url>https://github.iu.edu/iu-uits-es/ess-lms-bulk-remove-users</url>
     <inceptionYear>2022</inceptionYear>
