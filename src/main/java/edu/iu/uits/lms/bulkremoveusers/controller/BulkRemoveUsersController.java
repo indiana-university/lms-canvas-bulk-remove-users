@@ -10,8 +10,8 @@ import edu.iu.uits.lms.canvas.services.CourseService;
 import edu.iu.uits.lms.canvas.services.SectionService;
 import edu.iu.uits.lms.iuonly.services.SudsServiceImpl;
 import edu.iu.uits.lms.lti.LTIConstants;
-import edu.iu.uits.lms.lti.controller.LtiAuthenticationTokenAwareController;
-import edu.iu.uits.lms.lti.security.LtiAuthenticationToken;
+import edu.iu.uits.lms.lti.controller.OidcTokenAwareController;
+import edu.iu.uits.lms.lti.service.OidcTokenUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import uk.ac.ox.ctl.lti13.security.oauth2.client.lti.authentication.OidcAuthenticationToken;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/app")
 @Slf4j
-public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareController {
+public class BulkRemoveUsersController extends OidcTokenAwareController {
 
    @Autowired
    private AccountService accountService = null;
@@ -56,9 +57,12 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
       return "accessDenied";
    }
 
-   @RequestMapping("/loading/{courseId}")
+   @RequestMapping({"/loading", "/launch"})
    @Secured(LTIConstants.INSTRUCTOR_AUTHORITY)
-   public String loading(@PathVariable("courseId") String courseId, Model model) {
+   public String loading(Model model) {
+      OidcAuthenticationToken token = getTokenWithoutContext();
+      OidcTokenUtils oidcTokenUtils = new OidcTokenUtils(token);
+      String courseId = oidcTokenUtils.getCourseId();
       model.addAttribute("courseId", courseId);
       model.addAttribute("hideFooter", true);
       return "loading";
@@ -66,9 +70,9 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
 
    @RequestMapping("/index/{courseId}")
    @Secured(LTIConstants.INSTRUCTOR_AUTHORITY)
-   public ModelAndView index(@PathVariable("courseId") String courseId, Model model, HttpServletRequest request) {
+   public ModelAndView index(@PathVariable("courseId") String courseId, Model model) {
       log.debug("in /index");
-      LtiAuthenticationToken token = getValidatedToken(courseId);
+      OidcAuthenticationToken token = getValidatedToken(courseId);
       model.addAttribute("courseId", courseId);
 
       // add a link to the People tool that is used in the success message alert
@@ -221,9 +225,9 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
 
    @RequestMapping("/remove/{courseId}")
    @Secured(LTIConstants.INSTRUCTOR_AUTHORITY)
-   public ModelAndView remove(@RequestParam("user") List<String> userValues, @PathVariable("courseId") String courseId, Model model, HttpServletRequest request) {
+   public ModelAndView remove(@RequestParam("user") List<String> userValues, @PathVariable("courseId") String courseId, Model model) {
       log.debug("in /remove");
-      LtiAuthenticationToken token = getValidatedToken(courseId);
+      OidcAuthenticationToken token = getValidatedToken(courseId);
 
       boolean errors = false;
 
@@ -247,7 +251,7 @@ public class BulkRemoveUsersController extends LtiAuthenticationTokenAwareContro
          model.addAttribute("success", true);
       }
 
-      return index(courseId, model, request);
+      return index(courseId, model);
    }
 
    private Map<String, String> getCanvasRoleMap(String accountId) {

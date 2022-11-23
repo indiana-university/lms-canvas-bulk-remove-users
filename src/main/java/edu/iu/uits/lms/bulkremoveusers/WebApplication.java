@@ -23,8 +23,8 @@ import java.util.Date;
 @EnableGlobalErrorHandler(accessDeniedViewName="accessDenied")
 @Slf4j
 @EnableRedisConfiguration
-@EnableCookieFilter(ignoredRequestPatterns = {"/rest/**"})
-@EnableLtiClient
+@EnableCookieFilter
+@EnableLtiClient(toolKeys = "lms_bulkremoveusers")
 @EnableCanvasClient
 @EnableIuOnlyClient
 @EnableConfigurationProperties(GitRepositoryState.class)

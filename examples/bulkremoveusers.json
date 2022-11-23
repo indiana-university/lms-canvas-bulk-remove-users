@@ -1,0 +1,31 @@
+{
+  "title": "Bulk Remove Users",
+  "description": "Tool that helps bulk remove non-SIS enrollments in Canvas.",
+  "oidc_initiation_url": "http://localhost:8080/lti/login_initiation/lms_bulkremoveusers",
+  "target_link_uri": "http://localhost:8080/app/launch",
+  "extensions": [
+    {
+      "domain": "localhost",
+      "platform": "canvas.instructure.com",
+      "privacy_level": "public",
+      "not_selectable": true,
+      "settings": {
+        "placements": [
+          {
+            "enabled": true,
+            "placement": "course_navigation",
+            "message_type": "LtiResourceLinkRequest",
+            "default": "disabled",
+            "visibility": "admins"
+          }
+        ]
+      }
+    }
+  ],
+  "public_jwk_url": "http://localhost:8080/.well-known/jwks.json",
+  "custom_fields": {
+    "instructure_membership_roles": "$com.Instructure.membership.roles",
+    "canvas_course_id": "$Canvas.course.id",
+    "canvas_user_id": "$Canvas.user.id"
+  }
+}
