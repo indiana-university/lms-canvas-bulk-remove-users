@@ -13,9 +13,9 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
-    <version>5.0.0</version>
+    <version>5.0.0-SNAPSHOT</version>
     <description>Tool that helps bulk remove non-SIS enrollments in Canvas</description>
-    <url>https://github.iu.edu/iu-uits-es/ess-lms-bulk-remove-users</url>
+    <url>https://github.com/indiana-university/lms-canvas-bulk-remove-users</url>
     <inceptionYear>2022</inceptionYear>
 
     <organization>
@@ -32,44 +32,58 @@
         </developer>
     </developers>
 
-    <repositories>
-        <repository>
-            <id>IUMaven</id>
-            <name>IUMaven</name>
-            <url>https://uisapp2.iu.edu/nxs-prd/content/groups/public</url>
-        </repository>
-    </repositories>
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/indiana-university/lms-canvas-bulk-remove-users/issues</url>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>BSD 3-Clause License</name>
+            <url>https://opensource.org/licenses/BSD-3-Clause</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <distributionManagement>
         <repository>
-            <name>IU Maven Repository</name>
-            <id>IUMaven</id>
-            <url>https://uisapp2.iu.edu/nxs-prd/content/repositories/IUInternal</url>
+            <name>Sonatype OSS Repository</name>
+            <id>Sonatype-OSS</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
+        <snapshotRepository>
+            <name>Sonatype OSS Snapshot Repository</name>
+            <id>Sonatype-OSS</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
+
+    <scm>
+        <connection>scm:git:https://github.com/indiana-university/lms-canvas-bulk-remove-users.git</connection>
+        <developerConnection>scm:git:https://github.com/indiana-university/lms-canvas-bulk-remove-users.git</developerConnection>
+        <url>https://github.com/indiana-university/lms-canvas-bulk-remove-users</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
         <app.version>${project.version}</app.version>
-        <docker_repository_name>bulk-remove-users</docker_repository_name>
-        <docker_tag>stable</docker_tag>
-        <dockerfile-maven-plugin.version>1.4.13</dockerfile-maven-plugin.version>
-        <git-commit-id-maven-plugin.version>5.0.0</git-commit-id-maven-plugin.version>
-        <gitflow-plugin.version>1.15.1</gitflow-plugin.version>
-        <hibernate5-ddl-maven-plugin.version>2.3.0</hibernate5-ddl-maven-plugin.version>
-        <java.version>11</java.version>
-        <jdk.source>11</jdk.source>
-        <jdk.target>11</jdk.target>
-        <jgitflow.version>1.0-m5.1</jgitflow.version>
+        <java.version>17</java.version>
+        <jdk.source>17</jdk.source>
+        <jdk.target>17</jdk.target>
         <jquery.version>3.5.1</jquery.version>
-        <lms-canvas-services.version>5.0.5</lms-canvas-services.version>
-        <lms-canvas-common-configuration.version>5.0.2</lms-canvas-common-configuration.version>
-        <lms-canvas-lti-framework.version>5.0.4</lms-canvas-lti-framework.version>
+        <lms-canvas-services.version>5.0.11</lms-canvas-services.version>
+        <lms-canvas-common-configuration.version>5.0.8</lms-canvas-common-configuration.version>
+        <lms-canvas-iu-custom-services.version>5.0.13</lms-canvas-iu-custom-services.version>
+        <lms-canvas-lti-framework.version>5.1.18</lms-canvas-lti-framework.version>
         <lms-canvas-rivet.version>5.1.8.2_1</lms-canvas-rivet.version>
         <lms-canvas-redis-config.version>5.0.7</lms-canvas-redis-config.version>
-        <lms-iuonly-impl.version>5.0.1</lms-iuonly-impl.version>
-        <spring-cloud-starter-parent.version>2020.0.3</spring-cloud-starter-parent.version>
+        <nimbus-jose-jwt.version>9.10.1</nimbus-jose-jwt.version>
+        <spring-cloud-starter-vault-config.version>3.0.5</spring-cloud-starter-vault-config.version>
+        <spring-security-bom.version>5.5.2</spring-security-bom.version>
         <webjars-locator.version>0.42</webjars-locator.version>
 
+        <git-commit-id-maven-plugin.version>5.0.0</git-commit-id-maven-plugin.version>
+        <hibernate5-ddl-maven-plugin.version>2.3.0</hibernate5-ddl-maven-plugin.version>
         <plugins.compiler.version>3.8.1</plugins.compiler.version>
         <plugins.gpg.version>1.6</plugins.gpg.version>
         <plugins.javadoc.version>3.0.1</plugins.javadoc.version>
@@ -82,9 +96,14 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-parent</artifactId>
-                <version>${spring-cloud-starter-parent.version}</version>
+                <groupId>com.nimbusds</groupId>
+                <artifactId>nimbus-jose-jwt</artifactId>
+                <version>${nimbus-jose-jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-bom</artifactId>
+                <version>${spring-security-bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -93,12 +112,84 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>edu.iu.uits.lms</groupId>
+            <artifactId>lms-canvas-common-configuration</artifactId>
+            <version>${lms-canvas-common-configuration.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.iu.uits.lms</groupId>
+            <artifactId>lms-canvas-iu-custom-services</artifactId>
+            <version>${lms-canvas-iu-custom-services.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.iu.uits.lms</groupId>
+            <artifactId>lms-canvas-iu-custom-services</artifactId>
+            <version>${lms-canvas-iu-custom-services.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>edu.iu.uits.lms</groupId>
+            <artifactId>lms-canvas-lti-framework</artifactId>
+            <version>${lms-canvas-lti-framework.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.iu.uits.lms</groupId>
+            <artifactId>lms-canvas-lti-framework</artifactId>
+            <version>${lms-canvas-lti-framework.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>edu.iu.uits.lms</groupId>
+            <artifactId>lms-canvas-redis-config</artifactId>
+            <version>${lms-canvas-redis-config.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.iu.uits.lms</groupId>
+            <artifactId>lms-canvas-rivet</artifactId>
+            <version>${lms-canvas-rivet.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.iu.uits.lms</groupId>
+            <artifactId>lms-canvas-services</artifactId>
+            <version>${lms-canvas-services.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>edu.iu.uits.lms</groupId>
+            <artifactId>lms-canvas-services</artifactId>
+            <version>${lms-canvas-services.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-vault-config</artifactId>
+            <version>${spring-cloud-starter-vault-config.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -110,71 +201,8 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
         <dependency>
-            <groupId>nz.net.ultraq.thymeleaf</groupId>
-            <artifactId>thymeleaf-layout-dialect</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>edu.iu.uits.lms</groupId>
-            <artifactId>lms-canvas-lti-framework</artifactId>
-            <version>${lms-canvas-lti-framework.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.iu.uits.lms</groupId>
-            <artifactId>lms-canvas-lti-framework</artifactId>
-            <version>${lms-canvas-lti-framework.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.iu.uits.lms</groupId>
-            <artifactId>lms-canvas-services</artifactId>
-            <version>${lms-canvas-services.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.iu.uits.lms</groupId>
-            <artifactId>lms-canvas-services</artifactId>
-            <version>${lms-canvas-services.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>edu.iu.uits.lms</groupId>
-            <artifactId>lms-canvas-common-configuration</artifactId>
-            <version>${lms-canvas-common-configuration.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.iu.uits.lms</groupId>
-            <artifactId>lms-canvas-rivet</artifactId>
-            <version>${lms-canvas-rivet.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.iu.uits.lms</groupId>
-            <artifactId>lms-canvas-redis-config</artifactId>
-            <version>${lms-canvas-redis-config.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.iu.uits.lms</groupId>
-            <artifactId>lms-iuonly-impl</artifactId>
-            <version>${lms-iuonly-impl.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>edu.iu.uits.lms</groupId>
-            <artifactId>lms-iuonly-impl</artifactId>
-            <version>${lms-iuonly-impl.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-vault-config</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -202,6 +230,13 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
@@ -246,7 +281,9 @@
                         <param>postgresql9</param>
                     </dialects>
                     <packages>
+                        <param>edu.iu.uits.lms.iuonly</param>
                         <param>edu.iu.uits.lms.lti</param>
+                        <param>edu.iu.uits.lms.bulkremoveusers</param>
                     </packages>
                 </configuration>
             </plugin>
@@ -259,31 +296,39 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>external.atlassian.jgitflow</groupId>
-                <artifactId>jgitflow-maven-plugin</artifactId>
-                <version>${jgitflow.version}</version>
-                <dependencies>
-                    <!-- https://ecosystem.atlassian.net/browse/MJF-299 -->
-                    <!-- 2018-10-16: Must have been a recent change to github.iu.edu that removed support for a security algorithm -->
-                    <!-- Adding in an updated dependency to help -->
-                    <dependency>
-                        <groupId>com.jcraft</groupId>
-                        <artifactId>jsch</artifactId>
-                        <version>0.1.55</version>
-                    </dependency>
-                </dependencies>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${plugins.license.version}</version>
                 <configuration>
-                    <!-- see goals wiki page for configuration options -->
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <licenseName>bsd_3</licenseName>
+                    <failOnMissingHeader>true</failOnMissingHeader>
+                    <failOnNotUptodateHeader>true</failOnNotUptodateHeader>
+                    <excludes>
+                        <exclude>**/env.properties</exclude>
+                        <exclude>**/messages.properties</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>com.amashchenko.maven.plugin</groupId>
-                <artifactId>gitflow-maven-plugin</artifactId>
-                <version>${gitflow-plugin.version}</version>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>${plugins.nexus-staging.version}</version>
+                <extensions>true</extensions>
                 <configuration>
-                    <!-- see goals wiki page for configuration options -->
-                    <commitDevelopmentVersionAtStart>true</commitDevelopmentVersionAtStart>
+                    <serverId>Sonatype-OSS</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${plugins.release.version}</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
                 </configuration>
             </plugin>
         </plugins>
@@ -306,43 +351,46 @@
 
     <profiles>
         <profile>
-            <id>docker-push</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
+            <id>release</id>
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>com.spotify</groupId>
-                        <artifactId>dockerfile-maven-plugin</artifactId>
-                        <version>${dockerfile-maven-plugin.version}</version>
-                        <configuration>
-                            <repository>${docker_repository_base}${docker_repository_name}</repository>
-                            <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
-                        </configuration>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>${plugins.source.version}</version>
                         <executions>
                             <execution>
-                                <id>build-latest</id>
-                                <phase>package</phase>
+                                <id>attach-sources</id>
                                 <goals>
-                                    <goal>build</goal>
-                                    <goal>tag</goal>
-                                    <goal>push</goal>
+                                    <goal>jar-no-fork</goal>
                                 </goals>
-                                <configuration>
-                                    <tag>${docker_tag}</tag>
-                                </configuration>
                             </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${plugins.javadoc.version}</version>
+                        <executions>
                             <execution>
-                                <id>push-version</id>
-                                <phase>package</phase>
+                                <id>attach-javadocs</id>
                                 <goals>
-                                    <goal>tag</goal>
-                                    <goal>push</goal>
+                                    <goal>jar</goal>
                                 </goals>
-                                <configuration>
-                                    <tag>${project.version}</tag>
-                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${plugins.gpg.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
