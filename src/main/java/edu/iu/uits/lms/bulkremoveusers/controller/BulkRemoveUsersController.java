@@ -106,6 +106,7 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
    public ModelAndView index(@PathVariable("courseId") String courseId, Model model) {
       log.debug("in /index");
       OidcAuthenticationToken token = getValidatedToken(courseId);
+      OidcTokenUtils oidcTokenUtils = new OidcTokenUtils(token);
       model.addAttribute("courseId", courseId);
 
       // add a link to the People tool that is used in the success message alert
@@ -159,7 +160,7 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
          List<Enrollment> sisSectionEnrollments = sectionService.getAllSectionEnrollmentsByIdAndState(sisSection.getId(), states);
 
          for (Enrollment enrollment : sisSectionEnrollments) {
-            if (enrollment.getUser().getLoginId().equals(token.getPrincipal())) {
+            if (enrollment.getUser().getLoginId().equals(oidcTokenUtils.getUserLoginId())) {
                // can't remove yourself, so move on!
                continue;
             } else if (enrollment.getSisImportId() == null) {
@@ -186,7 +187,7 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
          List<Enrollment> nonSisSectionEnrollments = sectionService.getAllSectionEnrollmentsByIdAndState(nonSisSection.getId(), states);
 
          for (Enrollment enrollment : nonSisSectionEnrollments) {
-            if (enrollment.getUser().getLoginId().equals(token.getPrincipal())) {
+            if (enrollment.getUser().getLoginId().equals(oidcTokenUtils.getUserLoginId())) {
                // can't remove yourself, so move on!
                continue;
             } else {
