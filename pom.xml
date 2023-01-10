@@ -88,7 +88,7 @@
         <plugins.gpg.version>1.6</plugins.gpg.version>
         <plugins.javadoc.version>3.0.1</plugins.javadoc.version>
         <plugins.license.version>2.0.0</plugins.license.version>
-        <plugins.nexus-staging.version>1.6.8</plugins.nexus-staging.version>
+        <plugins.nexus-staging.version>1.6.13</plugins.nexus-staging.version>
         <plugins.release.version>2.5.3</plugins.release.version>
         <plugins.source.version>3.0.1</plugins.source.version>
     </properties>
