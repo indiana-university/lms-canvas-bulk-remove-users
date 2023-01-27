@@ -41,7 +41,7 @@ import edu.iu.uits.lms.canvas.services.AccountService;
 import edu.iu.uits.lms.canvas.services.CanvasService;
 import edu.iu.uits.lms.canvas.services.CourseService;
 import edu.iu.uits.lms.canvas.services.SectionService;
-import edu.iu.uits.lms.iuonly.services.SudsServiceImpl;
+import edu.iu.uits.lms.iuonly.services.SisServiceImpl;
 import edu.iu.uits.lms.lti.LTIConstants;
 import edu.iu.uits.lms.lti.controller.OidcTokenAwareController;
 import edu.iu.uits.lms.lti.service.OidcTokenUtils;
@@ -57,7 +57,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import uk.ac.ox.ctl.lti13.security.oauth2.client.lti.authentication.OidcAuthenticationToken;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -83,7 +82,7 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
    private SectionService sectionService = null;
 
    @Autowired
-   private SudsServiceImpl sudsService = null;
+   private SisServiceImpl sisService = null;
 
    @RequestMapping(value = "/accessDenied")
    public String accessDenied() {
@@ -121,16 +120,24 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
       // the final, curated list of enrollments to display in the tool
       List<EnrollmentDisplay> finalEnrollmentList = new ArrayList<>();
 
+      // you can't get term info from a section and you can't get sections from a Course object because Canvas returns
+      // them as a null, so have to do this extra call to get the SisTermId
+      String sisTermId = "";
+
+      try {
+         sisTermId = courseService.getCourse(courseId).getTerm().getSisTermId();
+      } catch (Exception e) {
+         // nothing to throw really. If the term or sisTermId is null, then this will just get classified as non-SIS
+      }
+
       // loop through the sections
       for (Section section : rawSectionList) {
          // see if the section has a sis id
-         if (section.getSis_section_id() != null && !section.getSis_section_id().isEmpty()) {
+         if (section.getSis_section_id() != null && !section.getSis_section_id().isEmpty()
+                 && sisTermId !=null && !sisTermId.isEmpty()) {
             // confirm if the sis id is an official SIS course
-            if (sudsService.getSudsCourseBySiteId(section.getSis_section_id()) != null) {
-               // confirmed this is in suds
-               sisSectionList.add(section);
-            } else if (sudsService.getSudsArchiveCourseBySiteId(section.getSis_section_id()) != null) {
-               // confirmed this is in suds archive
+            if (sisService.isLegitSisCourse(section.getSis_section_id(), sisTermId)) {
+               // confirmed this is in the sis class table
                sisSectionList.add(section);
             } else {
                // not in either, so consider it a non-sis section

@@ -40,6 +40,7 @@ import edu.iu.uits.lms.canvas.model.Course;
 import edu.iu.uits.lms.canvas.services.AccountService;
 import edu.iu.uits.lms.canvas.services.CourseService;
 import edu.iu.uits.lms.iuonly.jarexport.IuClientTestConfig;
+import edu.iu.uits.lms.iuonly.services.SisServiceImpl;
 import edu.iu.uits.lms.lti.LTIConstants;
 import edu.iu.uits.lms.lti.config.LtiClientTestConfig;
 import edu.iu.uits.lms.lti.config.TestUtils;
@@ -77,6 +78,9 @@ public class AppLaunchSecurityTest {
 
    @MockBean
    private CourseService courseService = null;
+
+   @MockBean
+   private SisServiceImpl sisService = null;
 
    @Test
    public void appNoAuthnLaunch() throws Exception {
