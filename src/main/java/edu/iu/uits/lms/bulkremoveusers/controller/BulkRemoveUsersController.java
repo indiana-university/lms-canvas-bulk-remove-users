@@ -120,23 +120,12 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
       // the final, curated list of enrollments to display in the tool
       List<EnrollmentDisplay> finalEnrollmentList = new ArrayList<>();
 
-      // you can't get term info from a section and you can't get sections from a Course object because Canvas returns
-      // them as a null, so have to do this extra call to get the SisTermId
-      String sisTermId = "";
-
-      try {
-         sisTermId = courseService.getCourse(courseId).getTerm().getSisTermId();
-      } catch (Exception e) {
-         // nothing to throw really. If the term or sisTermId is null, then this will just get classified as non-SIS
-      }
-
       // loop through the sections
       for (Section section : rawSectionList) {
          // see if the section has a sis id
-         if (section.getSis_section_id() != null && !section.getSis_section_id().isEmpty()
-                 && sisTermId !=null && !sisTermId.isEmpty()) {
+         if (section.getSis_section_id() != null && !section.getSis_section_id().isEmpty()) {
             // confirm if the sis id is an official SIS course
-            if (sisService.isLegitSisCourse(section.getSis_section_id(), sisTermId)) {
+            if (sisService.isLegitSisCourse(section.getSis_section_id())) {
                // confirmed this is in the sis class table
                sisSectionList.add(section);
             } else {
