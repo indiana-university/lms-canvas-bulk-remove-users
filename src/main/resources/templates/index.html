@@ -45,7 +45,7 @@
         <div class="rvt-alert__title" id="success-alert-title-edit">Users successfully removed</div>
         <p class="rvt-alert__message">You may return to the <a th:href="${peopleToolUrl}" target="_parent">People tool</a>.</p>
         <button class="rvt-alert__dismiss" data-rvt-alert-close>
-            <span class="rvt-sr-only">Dismiss this alert</span>
+            <span class="rvt-sr-only">Close</span>
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                 <path fill="currentColor" d="M9.41,8l5.29-5.29a1,1,0,0,0-1.41-1.41L8,6.59,2.71,1.29A1,1,0,0,0,1.29,2.71L6.59,8,1.29,13.29a1,1,0,1,0,1.41,1.41L8,9.41l5.29,5.29a1,1,0,0,0,1.41-1.41Z"/>
             </svg>
@@ -55,7 +55,7 @@
         <div class="rvt-alert__title" id="error-alert-title">Error</div>
         <p class="rvt-alert__message">There was an issue removing users. Please try again.</p>
         <button class="rvt-alert__dismiss" data-rvt-alert-close>
-            <span class="rvt-sr-only">Dismiss this alert</span>
+            <span class="rvt-sr-only">Close</span>
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                 <path fill="currentColor" d="M9.41,8l5.29-5.29a1,1,0,0,0-1.41-1.41L8,6.59,2.71,1.29A1,1,0,0,0,1.29,2.71L6.59,8,1.29,13.29a1,1,0,1,0,1.41,1.41L8,9.41l5.29,5.29a1,1,0,0,0,1.41-1.41Z"/>
             </svg>
@@ -151,7 +151,7 @@
                 <tr th:each="enrollmentDisplay : ${finalEnrollmentList}">
                     <th scope="row" class="checkboxColumn">
                         <div class="rvt-checkbox checkbox-left-padding-override">
-                            <input type="checkbox" class="rvt-checkbox" name="user" th:id="|checkbox-${enrollmentDisplay.enrollmentId}|"
+                            <input type="checkbox" name="user" th:id="|checkbox-${enrollmentDisplay.enrollmentId}|"
                                 th:data-attribute="${enrollmentDisplay.baseRole}"
                                 th:data-is-dupe="${#arrays.contains(dupeUsernames, enrollmentDisplay.username)}"
                                 th:value="${enrollmentDisplay.enrollmentId}" />
