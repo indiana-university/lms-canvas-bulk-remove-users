@@ -41,28 +41,28 @@
 <body>
 <div layout:fragment="content">
     <!-- alerts section -->
-    <div th:if="${success}" class="rvt-alert rvt-alert--success rvt-m-top-sm" role="alertdialog" aria-labelledby="success-alert-title-edit">
-        <h1 class="rvt-alert__title" id="success-alert-title-edit">Users successfully removed</h1>
+    <div th:if="${success}" class="rvt-alert rvt-alert--success [ rvt-m-top-md ]" role="alert" aria-labelledby="success-alert-title-edit" data-rvt-alert="success">
+        <div class="rvt-alert__title" id="success-alert-title-edit">Users successfully removed</div>
         <p class="rvt-alert__message">You may return to the <a th:href="${peopleToolUrl}" target="_parent">People tool</a>.</p>
-        <button type="button" class="rvt-alert__dismiss" data-alert-close>
-            <span class="v-hide">Dismiss this alert</span>
+        <button class="rvt-alert__dismiss" data-rvt-alert-close>
+            <span class="rvt-sr-only">Close</span>
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                 <path fill="currentColor" d="M9.41,8l5.29-5.29a1,1,0,0,0-1.41-1.41L8,6.59,2.71,1.29A1,1,0,0,0,1.29,2.71L6.59,8,1.29,13.29a1,1,0,1,0,1.41,1.41L8,9.41l5.29,5.29a1,1,0,0,0,1.41-1.41Z"/>
             </svg>
         </button>
     </div>
-    <div th:if="${errors}" class="rvt-alert rvt-alert--danger rvt-m-top-sm" role="alertdialog" aria-labelledby="error-alert-title">
-        <h1 class="rvt-alert__title" id="error-alert-title">Error</h1>
+    <div th:if="${errors}" class="rvt-alert rvt-alert--danger [ rvt-m-top-md ]" role="alert" aria-labelledby="error-alert-title" data-rvt-alert="error">
+        <div class="rvt-alert__title" id="error-alert-title">Error</div>
         <p class="rvt-alert__message">There was an issue removing users. Please try again.</p>
-        <button type="button" class="rvt-alert__dismiss" data-alert-close>
-            <span class="v-hide">Dismiss this alert</span>
+        <button class="rvt-alert__dismiss" data-rvt-alert-close>
+            <span class="rvt-sr-only">Close</span>
             <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
                 <path fill="currentColor" d="M9.41,8l5.29-5.29a1,1,0,0,0-1.41-1.41L8,6.59,2.71,1.29A1,1,0,0,0,1.29,2.71L6.59,8,1.29,13.29a1,1,0,1,0,1.41,1.41L8,9.41l5.29,5.29a1,1,0,0,0,1.41-1.41Z"/>
             </svg>
         </button>
     </div>
     <!-- main page -->
-    <h1 class="rvt-ts-32 rvt-p-tb-sm">Bulk Remove Users</h1>
+    <h1 id="bulk-remove-users-title" class="rvt-ts-32 rvt-p-tb-sm">Bulk Remove Users</h1>
     <span th:if="${finalEnrollmentList.isEmpty()}">SIS-enrolled users are not listed and cannot be removed with this tool.</span>
     <div th:if="${finalEnrollmentList.isEmpty()}" class="rvt-inline-alert rvt-inline-alert--standalone rvt-inline-alert--info rvt-p-tb-sm">
         <span class="rvt-inline-alert__icon">
@@ -81,54 +81,66 @@
 
     <span th:if="not ${finalEnrollmentList.isEmpty()}">SIS-enrolled users are not listed and cannot be removed with this tool.</span>
     <form th:if="not ${finalEnrollmentList.isEmpty()}" id="bulk-remove-users-form" th:action="@{|/app/remove/${courseId}|}" method="post">
-        <div class="rvt-box rvt-m-top-sm">
-            <div class="rvt-box__row">
-                <fieldset>
+        <div class="rvt-border-all rvt-border-radius rvt-p-all-sm rvt-m-top-sm">
+            <p class="rvt-m-all-none">
+                <fieldset class="rvt-fieldset">
                     <legend class="rvt-m-bottom-sm">Select by role:</legend>
-                    <ul class="rvt-inline-list">
+                    <ul class="rvt-list-inline">
                         <li>
-                            <input type="checkbox" id="checkbox-all" />
-                            <label for="checkbox-all" class="rvt-m-right-lg" th:text="|All users (${allUserCount})|">All users (16)</label>
+                            <div class="rvt-checkbox">
+                                <input type="checkbox" id="checkbox-all" />
+                                <label for="checkbox-all" class="rvt-m-right-lg" th:text="|All users (${allUserCount})|">All users (16)</label>
+                            </div>
                         </li>
                         <li>
-                            <input type="checkbox" id="checkbox-teachers"
-                                th:disabled="${disableTeachers}" th:aria-disabled="${disableTeachers}" />
-                            <label for="checkbox-teachers" class="rvt-m-right-lg" th:text="|Teachers (${teacherCount})|">Teachers (3)</label>
+                            <div class="rvt-checkbox">
+                                <input type="checkbox" id="checkbox-teachers"
+                                      th:disabled="${disableTeachers}" th:aria-disabled="${disableTeachers}" />
+                                <label for="checkbox-teachers" class="rvt-m-right-lg" th:text="|Teachers (${teacherCount})|">Teachers (3)</label>
+                            </div>
                         </li>
                         <li>
-                            <input type="checkbox" id="checkbox-students"
-                               th:disabled="${disableStudents}" th:aria-disabled="${disableStudents}" />
-                            <label for="checkbox-students" class="rvt-m-right-lg" th:text="|Students (${studentCount})|">Students (4)</label>
+                            <div class="rvt-checkbox">
+                                <input type="checkbox" id="checkbox-students"
+                                       th:disabled="${disableStudents}" th:aria-disabled="${disableStudents}" />
+                                <label for="checkbox-students" class="rvt-m-right-lg" th:text="|Students (${studentCount})|">Students (4)</label>
+                            </div>
                         </li>
                         <li>
-                            <input type="checkbox" id="checkbox-tas"
-                               th:disabled="${disableTAs}" th:aria-disabled="${disableTAs}" />
+                            <div class="rvt-checkbox">
+                                <input type="checkbox" id="checkbox-tas"
+                                       th:disabled="${disableTAs}" th:aria-disabled="${disableTAs}" />
                             <label for="checkbox-tas" class="rvt-m-right-lg" th:text="|TAs (${taCount})|">TAs (3)</label>
+                            </div>
                         </li>
                         <li>
-                            <input type="checkbox" id="checkbox-designers"
-                               th:disabled="${disableDesigners}" th:aria-disabled="${disableDesigners}" />
-                            <label for="checkbox-designers" class="rvt-m-right-lg" th:text="|Designers (${designerCount})|">Designers (3)</label>
+                            <div class="rvt-checkbox">
+                                <input type="checkbox" id="checkbox-designers"
+                                       th:disabled="${disableDesigners}" th:aria-disabled="${disableDesigners}" />
+                                <label for="checkbox-designers" class="rvt-m-right-lg" th:text="|Designers (${designerCount})|">Designers (3)</label>
+                            </div>
                         </li>
                         <li>
-                            <input type="checkbox" id="checkbox-observers"
-                               th:disabled="${disableObservers}" th:aria-disabled="${disableObservers}" />
-                            <label for="checkbox-observers" class="rvt-m-right-lg" th:text="|Observers (${observerCount})|">Observers (3)</label>
+                            <div class="rvt-checkbox">
+                                <input type="checkbox" id="checkbox-observers"
+                                       th:disabled="${disableObservers}" th:aria-disabled="${disableObservers}" />
+                                <label for="checkbox-observers" class="rvt-m-right-lg" th:text="|Observers (${observerCount})|">Observers (3)</label>
+                            </div>
                         </li>
                     </ul>
                 </fieldset>
-            </div>
+            </p>
         </div>
         <div class="rvt-m-top-md">
-            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-modal-trigger="edit-tool-properties" aria-describedby="users-selected" aria-disabled="true" disabled>Remove selected users</button>
+            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-rvt-dialog-trigger="edit-tool-properties" aria-describedby="users-selected" aria-disabled="true" disabled>Remove selected users</button>
             <span id="users-selected" aria-live="polite">0 selected</span>
         </div>
         <div>
-            <table class="rvt-table-cells rvt-table-compact rvt-m-top-md">
-                <caption class="sr-only">Table with user information and checkboxes to select for removing them</caption>
+            <table class="rvt-table-cells rvt-table-compact rvt-m-top-md table-line-height-override">
+                <caption class="rvt-sr-only">Table with user information and checkboxes to select for removing them</caption>
                 <thead>
                 <tr>
-                    <th scope="col" class="checkboxColumn"><span class="sr-only">Select</span></th>
+                    <th scope="col" class="checkboxColumn"><span class="rvt-sr-only">Select</span></th>
                     <th scope="col">Name</th>
                     <th scope="col">Username</th>
                     <th scope="col">Role</th>
@@ -138,13 +150,15 @@
                 <tbody>
                 <tr th:each="enrollmentDisplay : ${finalEnrollmentList}">
                     <th scope="row" class="checkboxColumn">
-                        <input type="checkbox" name="user" th:id="|checkbox-${enrollmentDisplay.enrollmentId}|"
-                            th:data-attribute="${enrollmentDisplay.baseRole}"
-                            th:data-is-dupe="${#arrays.contains(dupeUsernames, enrollmentDisplay.username)}"
-                            th:value="${enrollmentDisplay.enrollmentId}" />
-                        <label th:for="|checkbox-${enrollmentDisplay.enrollmentId}|" class="labeloverride">
-                            <span class="sr-only" th:text="|Select ${enrollmentDisplay.displayName}|">Select Banner, Bruce</span>
-                        </label>
+                        <div class="rvt-checkbox checkbox-left-padding-override">
+                            <input type="checkbox" name="user" th:id="|checkbox-${enrollmentDisplay.enrollmentId}|"
+                                th:data-attribute="${enrollmentDisplay.baseRole}"
+                                th:data-is-dupe="${#arrays.contains(dupeUsernames, enrollmentDisplay.username)}"
+                                th:value="${enrollmentDisplay.enrollmentId}" />
+                            <label th:for="|checkbox-${enrollmentDisplay.enrollmentId}|" class="labeloverride">
+                                <span class="rvt-sr-only" th:text="|Select ${enrollmentDisplay.displayName}|">Select Banner, Bruce</span>
+                            </label>
+                        </div>
                     </th>
                     <td th:text="${enrollmentDisplay.displayName}" class="displayName">Banner, Bruce</td>
                     <td th:text="${enrollmentDisplay.username}" class="username">bbanner</td>
@@ -155,30 +169,33 @@
             </table>
         </div>
         <div class="rvt-m-top-md">
-            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-modal-trigger="edit-tool-properties" aria-describedby="users-selected" aria-disabled="true" disabled>Remove selected users</button>
+            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-rvt-dialog-trigger="edit-tool-properties" aria-describedby="users-selected" aria-disabled="true" disabled>Remove selected users</button>
         </div>
 
         <!-- dialog box -->
-        <div class="rvt-modal rvt-modal-override"
+        <div class="rvt-dialog rvt-dialog-override"
              id="edit-tool-properties"
              role="dialog"
-             aria-labelledby="edit-tool-properties-dialog"
-             aria-hidden="true"
              tabindex="-1"
-             data-modal-dialog="true">
-            <div class="rvt-modal__inner">
-                <header class="rvt-modal__header">
-                    <h1 class="rvt-modal__title" id="edit-tool-properties-dialog">Remove Users</h1>
+             aria-labelledby="edit-tool-properties-dialog"
+             aria-describedby="edit-tool-properties-dialog-description"
+             data-rvt-dialog="edit-tool-properties"
+             data-rvt-dialog-darken-page
+             data-rvt-dialog-disable-page-interaction
+             hidden>
+            <div class="rvt-dialog__inner">
+                <header class="rvt-dialog__header">
+                    <h1 class="rvt-dialog__title" id="edit-tool-properties-dialog">Remove Users</h1>
                 </header>
-                <div class="rvt-modal__body rvt-modal__body-override">
-                    <p class="rvt-text-bold">Are you sure you want to remove these users?</p>
-                    <ul class="rvt-plain-list modal-list"></ul>
+                <div class="rvt-dialog__body rvt-dialog__body-override">
+                    <p class="rvt-text-bold" id="edit-tool-properties-dialog-description">Are you sure you want to remove these users?</p>
+                    <ul class="rvt-list-plain modal-list"></ul>
                 </div>
-                <div class="rvt-modal__controls">
+                <div class="rvt-dialog__controls">
                     <button id="dialog-submit" type="submit" class="rvt-button">
                         <span class="rvt-button__content">Yes, remove</span>
                     </button>
-                    <button id="dialog-cancel" type="button" class="rvt-button rvt-button--secondary" data-modal-close="edit-tool-properties">Cancel</button>
+                    <button id="dialog-cancel" type="button" class="rvt-button rvt-button--secondary" data-rvt-dialog-close="edit-tool-properties">Cancel</button>
                 </div>
             </div>
         </div>

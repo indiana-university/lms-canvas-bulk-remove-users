@@ -77,7 +77,7 @@
         <lms-canvas-common-configuration.version>5.0.11</lms-canvas-common-configuration.version>
         <lms-canvas-iu-custom-services.version>5.0.15</lms-canvas-iu-custom-services.version>
         <lms-canvas-lti-framework.version>5.1.22</lms-canvas-lti-framework.version>
-        <lms-canvas-rivet.version>5.1.8.2_1</lms-canvas-rivet.version>
+        <lms-canvas-rivet.version>5.2.3.1</lms-canvas-rivet.version>
         <lms-canvas-redis-config.version>5.0.9</lms-canvas-redis-config.version>
         <nimbus-jose-jwt.version>9.10.1</nimbus-jose-jwt.version>
         <spring-cloud-starter-vault-config.version>3.0.5</spring-cloud-starter-vault-config.version>
