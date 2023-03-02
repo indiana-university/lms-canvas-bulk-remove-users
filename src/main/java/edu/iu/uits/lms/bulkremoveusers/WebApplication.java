@@ -53,7 +53,7 @@ import org.springframework.context.annotation.Bean;
 import java.util.Date;
 
 @SpringBootApplication
-@EnableGlobalErrorHandler(accessDeniedViewName="accessDenied")
+@EnableGlobalErrorHandler
 @Slf4j
 @EnableRedisConfiguration
 @EnableCookieFilter(ignoredRequestPatterns = {"/rest/**"})
