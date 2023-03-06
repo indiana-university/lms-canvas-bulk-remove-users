@@ -79,7 +79,6 @@
         <lms-embedded-services.version>5.2.1</lms-embedded-services.version>
         <lms-team-spring-boot-it12>4.7</lms-team-spring-boot-it12>
         <spring-cloud.version>2021.0.5</spring-cloud.version>
-        <springdoc-openapi-ui.version>1.6.14</springdoc-openapi-ui.version>
         <webjars-locator.version>0.46</webjars-locator.version>
 
         <plugins.compiler.version>3.10.1</plugins.compiler.version>
