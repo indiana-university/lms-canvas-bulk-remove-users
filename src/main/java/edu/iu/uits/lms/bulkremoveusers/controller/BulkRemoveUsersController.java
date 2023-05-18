@@ -41,7 +41,7 @@ import edu.iu.uits.lms.canvas.services.AccountService;
 import edu.iu.uits.lms.canvas.services.CanvasService;
 import edu.iu.uits.lms.canvas.services.CourseService;
 import edu.iu.uits.lms.canvas.services.SectionService;
-import edu.iu.uits.lms.iuonly.services.SudsServiceImpl;
+import edu.iu.uits.lms.iuonly.services.SisServiceImpl;
 import edu.iu.uits.lms.lti.LTIConstants;
 import edu.iu.uits.lms.lti.controller.OidcTokenAwareController;
 import edu.iu.uits.lms.lti.service.OidcTokenUtils;
@@ -57,7 +57,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import uk.ac.ox.ctl.lti13.security.oauth2.client.lti.authentication.OidcAuthenticationToken;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -83,7 +82,7 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
    private SectionService sectionService = null;
 
    @Autowired
-   private SudsServiceImpl sudsService = null;
+   private SisServiceImpl sisService = null;
 
    @RequestMapping(value = "/accessDenied")
    public String accessDenied() {
@@ -126,11 +125,8 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
          // see if the section has a sis id
          if (section.getSis_section_id() != null && !section.getSis_section_id().isEmpty()) {
             // confirm if the sis id is an official SIS course
-            if (sudsService.getSudsCourseBySiteId(section.getSis_section_id()) != null) {
-               // confirmed this is in suds
-               sisSectionList.add(section);
-            } else if (sudsService.getSudsArchiveCourseBySiteId(section.getSis_section_id()) != null) {
-               // confirmed this is in suds archive
+            if (sisService.isLegitSisCourse(section.getSis_section_id())) {
+               // confirmed this is in the sis class table
                sisSectionList.add(section);
             } else {
                // not in either, so consider it a non-sis section
