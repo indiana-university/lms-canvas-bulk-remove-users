@@ -84,11 +84,6 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
    @Autowired
    private SisServiceImpl sisService = null;
 
-   @RequestMapping(value = "/accessDenied")
-   public String accessDenied() {
-      return "accessDenied";
-   }
-
    @RequestMapping({"/loading", "/launch"})
    @Secured(LTIConstants.INSTRUCTOR_AUTHORITY)
    public String loading(Model model) {
