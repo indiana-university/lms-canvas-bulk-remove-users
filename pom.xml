@@ -9,7 +9,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.16</version>
+        <version>2.7.17</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
@@ -63,10 +63,10 @@
         <jdk.target>17</jdk.target>
         <jquery.version>3.7.1</jquery.version>
         <lms-canvas-rivet.version>5.2.5.2</lms-canvas-rivet.version>
-        <lms-embedded-services.version>5.2.19</lms-embedded-services.version>
+        <lms-embedded-services.version>5.2.23</lms-embedded-services.version>
         <lms-team-spring-boot-it12>4.8</lms-team-spring-boot-it12>
         <spring-cloud.version>2021.0.8</spring-cloud.version>
-        <webjars-locator.version>0.47</webjars-locator.version>
+        <webjars-locator.version>0.48</webjars-locator.version>
 
         <plugins.compiler.version>3.11.0</plugins.compiler.version>
         <plugins.license.version>2.0.0</plugins.license.version>
