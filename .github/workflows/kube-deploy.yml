@@ -72,7 +72,7 @@ jobs:
       - name: Create maven settings.xml
         run: echo -n '${{ secrets.LMS_MAVEN_SETTINGS }}' | base64 -d > /root/.m2/settings.xml
       - name: Maven Build
-        run: mvn clean install -P 'it12'
+        run: mvn clean install -P 'denodo,it12'
         working-directory: tools/${{ env.DEPLOY_DIR }}
       - name: copy jar file
         run: |
