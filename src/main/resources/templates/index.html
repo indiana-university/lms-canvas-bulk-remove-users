@@ -156,7 +156,7 @@
                                 th:data-is-dupe="${#arrays.contains(dupeUsernames, enrollmentDisplay.username)}"
                                 th:value="${enrollmentDisplay.enrollmentId}" />
                             <label th:for="|checkbox-${enrollmentDisplay.enrollmentId}|" class="labeloverride">
-                                <span class="rvt-sr-only" th:text="|Select ${enrollmentDisplay.displayName}|">Select Banner, Bruce</span>
+                                <span class="rvt-sr-only" th:text="${enrollmentDisplay.displayName}">Select Banner, Bruce</span>
                             </label>
                         </div>
                     </th>
