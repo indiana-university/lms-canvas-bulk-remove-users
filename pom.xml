@@ -54,23 +54,25 @@
 
     <properties>
         <app.version>${project.version}</app.version>
+        <datatables.version>2.0.3</datatables.version>
+        <datatables-searchpanes.version>2.3.0</datatables-searchpanes.version>
         <denodo-hibernate-dialect.version>8.0.20201021</denodo-hibernate-dialect.version>
         <denodo-jdbc.version>8.0.2</denodo-jdbc.version>
-        <git-commit-id-maven-plugin.version>5.0.0</git-commit-id-maven-plugin.version>
+        <git-commit-id-maven-plugin.version>8.0.2</git-commit-id-maven-plugin.version>
         <hibernate5-ddl-maven-plugin.version>2.5.0</hibernate5-ddl-maven-plugin.version>
         <java.version>17</java.version>
         <jdk.source>17</jdk.source>
         <jdk.target>17</jdk.target>
         <jquery.version>3.7.1</jquery.version>
-        <lms-canvas-rivet.version>5.2.5.2</lms-canvas-rivet.version>
-        <lms-embedded-services.version>5.2.23</lms-embedded-services.version>
-        <lms-team-spring-boot-it12>4.8</lms-team-spring-boot-it12>
-        <spring-cloud.version>2021.0.8</spring-cloud.version>
-        <webjars-locator.version>0.48</webjars-locator.version>
+        <lms-canvas-rivet.version>5.2.6.0</lms-canvas-rivet.version>
+        <lms-embedded-services.version>5.2.34</lms-embedded-services.version>
+        <lms-team-spring-boot-it12>5.4.7</lms-team-spring-boot-it12>
+        <spring-cloud.version>2021.0.9</spring-cloud.version>
+        <webjars-locator.version>0.52</webjars-locator.version>
 
-        <plugins.compiler.version>3.11.0</plugins.compiler.version>
-        <plugins.license.version>2.0.0</plugins.license.version>
-        <plugins.release.version>3.0.0</plugins.release.version>
+        <plugins.compiler.version>3.13.0</plugins.compiler.version>
+        <plugins.license.version>2.4.0</plugins.license.version>
+        <plugins.release.version>3.0.1</plugins.release.version>
     </properties>
 
     <dependencyManagement>
@@ -194,6 +196,16 @@
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>${jquery.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>datatables</artifactId>
+            <version>${datatables.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>datatables-searchpanes</artifactId>
+            <version>${datatables-searchpanes.version}</version>
         </dependency>
     </dependencies>
 

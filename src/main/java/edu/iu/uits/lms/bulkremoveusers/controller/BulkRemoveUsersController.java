@@ -33,6 +33,7 @@ package edu.iu.uits.lms.bulkremoveusers.controller;
  * #L%
  */
 
+import edu.iu.uits.lms.canvas.helpers.CanvasDateFormatUtil;
 import edu.iu.uits.lms.canvas.helpers.EnrollmentHelper;
 import edu.iu.uits.lms.canvas.model.CanvasRole;
 import edu.iu.uits.lms.canvas.model.Enrollment;
@@ -83,6 +84,8 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
 
    @Autowired
    private SisServiceImpl sisService = null;
+
+   public static final String DATE_ONLY_FORMAT = "MM/dd/yyyy";
 
    @RequestMapping({"/loading", "/launch"})
    @Secured(LTIConstants.INSTRUCTOR_AUTHORITY)
@@ -167,6 +170,8 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
                enrollmentDisplay.setRole(roleMap.get(enrollment.getRole()));
                enrollmentDisplay.setBaseRole(enrollment.getType());
                enrollmentDisplay.setSectionName(sisSection.getName());
+               enrollmentDisplay.setCreatedAt(CanvasDateFormatUtil.formatISODateForDisplay(enrollment.getCreatedAt(), null, DATE_ONLY_FORMAT));
+               enrollmentDisplay.setLastActivityAt(CanvasDateFormatUtil.formatISODateForDisplay(enrollment.getLastActivityAt(), null, DATE_ONLY_FORMAT));
                finalEnrollmentList.add(enrollmentDisplay);
             }
          }
@@ -194,6 +199,8 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
                enrollmentDisplay.setRole(roleMap.get(enrollment.getRole()));
                enrollmentDisplay.setBaseRole(enrollment.getType());
                enrollmentDisplay.setSectionName(nonSisSection.getName());
+               enrollmentDisplay.setCreatedAt(CanvasDateFormatUtil.formatISODateForDisplay(enrollment.getCreatedAt(), null, DATE_ONLY_FORMAT));
+               enrollmentDisplay.setLastActivityAt(CanvasDateFormatUtil.formatISODateForDisplay(enrollment.getLastActivityAt(), null, DATE_ONLY_FORMAT));
                finalEnrollmentList.add(enrollmentDisplay);
             }
          }
@@ -203,31 +210,6 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
       finalEnrollmentList = finalEnrollmentList.stream()
               .sorted(Comparator.comparing(EnrollmentDisplay::getDisplayName)
               .thenComparing(EnrollmentDisplay::getSectionName)).collect(Collectors.toList());
-
-      // get a distinct list of roles
-      List<String> distinctRoles = finalEnrollmentList.stream()
-              .map(EnrollmentDisplay::getBaseRole)
-              .distinct().collect(Collectors.toList());
-
-      // using the distinct list of roles, determine which checkboxes will be disabled
-      model.addAttribute("disableTeachers", !distinctRoles.contains(EnrollmentHelper.TYPE_TEACHER));
-      model.addAttribute("disableStudents", !distinctRoles.contains(EnrollmentHelper.TYPE_STUDENT));
-      model.addAttribute("disableTAs", !distinctRoles.contains(EnrollmentHelper.TYPE_TA));
-      model.addAttribute("disableDesigners", !distinctRoles.contains(EnrollmentHelper.TYPE_DESIGNER));
-      model.addAttribute("disableObservers", !distinctRoles.contains(EnrollmentHelper.TYPE_OBSERVER));
-
-      // using this just for getting the roles and using them for an official count with the checkboxes at the top of the page
-      List<String> listOfRoles = finalEnrollmentList.stream()
-              .map(EnrollmentDisplay::getBaseRole)
-              .collect(Collectors.toList());
-
-      // count the amount of times each role occurs. This is used for checkboxes at the top of the page
-      model.addAttribute("allUserCount", finalEnrollmentList.size());
-      model.addAttribute("teacherCount", Collections.frequency(listOfRoles, EnrollmentHelper.TYPE_TEACHER));
-      model.addAttribute("studentCount", Collections.frequency(listOfRoles, EnrollmentHelper.TYPE_STUDENT));
-      model.addAttribute("taCount", Collections.frequency(listOfRoles, EnrollmentHelper.TYPE_TA));
-      model.addAttribute("designerCount", Collections.frequency(listOfRoles, EnrollmentHelper.TYPE_DESIGNER));
-      model.addAttribute("observerCount", Collections.frequency(listOfRoles, EnrollmentHelper.TYPE_OBSERVER));
 
       // section for making a list of duplicate usernames. This is strictly used for the dialog box to give more precise information
       List<String> usernameList = finalEnrollmentList.stream()
@@ -297,5 +279,7 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
       private String role;
       private String baseRole;
       private String sectionName;
+      private String createdAt;
+      private String lastActivityAt;
    }
 }
