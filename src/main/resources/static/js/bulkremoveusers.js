@@ -31,6 +31,32 @@
  * #L%
  */
 
+ $(document).ready(function() {
+    applyAccessibilityOverrides();
+ });
+
+$('#appTable').on( 'draw.dt', function () {
+    // after the table is drawn (on init, sort, search, etc) we need to apply the accessibility fixes again
+    fixTableHeaders();
+    labelCheckboxes();
+
+} );
+
+$("th.sorting").click(function() {
+    sortingNotify($(this));
+});
+
+function labelCheckboxes() {
+    $("th.userCheckbox").each( function() {
+        // need to add a label pointing to the user's name in the username column
+        let usernameCol = $(this).closest('tr').find('td.displayName')[0];
+        let userCB = $(this).find('input[type=checkbox]')[0];
+        $(userCB).attr("aria-labelledby", usernameCol.id);
+        $(userCB).removeAttr("aria-label");
+    });
+}
+
+
 function userSelectedCounter() {
     // Get all the selected checkboxes, except the "select-all" one up in the table header
     var newValue = document.querySelectorAll('input.dt-select-checkbox:checked:not(.header-checkbox)').length;
@@ -44,6 +70,33 @@ function userSelectedCounter() {
         $(".modalButton").attr('disabled', '');
         $(".modalButton").attr('aria-disabled', 'true');
     }
+}
+
+sortingNotify = function (sortHeader) {
+    var sortBy = sortHeader.text();
+    var direction = sortHeader.hasClass("sorting_asc") ? "ascending" : "descending";
+    $("#sortingAnnc").text("Sorting by " + sortBy + " " + direction);
+    //fixTableHeaders();
+}
+
+
+function addDescriptiveLabels() {
+	$('div.dt-search').find('input[type=search]').attr('aria-describedby','searchText');
+}
+
+fixTableHeaders = function() {
+    $("th.sorting").each( function() {
+        $(this).attr("aria-description", "Activate to sort");
+        $(this).removeAttr("aria-label");
+    });
+}
+
+
+function applyAccessibilityOverrides() {
+
+    // add more descriptive labels to the form elements with implicit labels
+    addDescriptiveLabels();
+
 }
 
 $(".modalButton").click(function() {
@@ -104,8 +157,17 @@ var table = $('#appTable').DataTable({
             searchable: false
         }
        ],
+   language: {
+           aria: {
+               orderableReverse: '',
+               orderable: '',
+               orderableRemove: '',
+
+           }
+       },
    initComplete: function () {
        $('#appTable').wrap("<div style='overflow:auto;width:100%;position:relative;'></div>");
+//       labelCheckboxes();
    },
    select: {
         selector: 'th:first-child',

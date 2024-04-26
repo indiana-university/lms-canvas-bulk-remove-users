@@ -79,32 +79,35 @@
         </span>
     </div>
 
+    <span id="sortingAnnc" class="rvt-sr-only" aria-live="polite"></span>
+    <span id="searchText" hidden>Search for data within the table of users</span>
+
     <span th:if="not ${finalEnrollmentList.isEmpty()}">SIS-enrolled users are not listed and cannot be removed with this tool.</span>
     <form th:if="not ${finalEnrollmentList.isEmpty()}" id="bulk-remove-users-form" th:action="@{|/app/remove/${courseId}|}" method="post">
         <div class="rvt-m-top-md">
-            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-rvt-dialog-trigger="edit-tool-properties" aria-describedby="users-selected" aria-disabled="true" disabled>Remove selected users</button>
+            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-rvt-dialog-trigger="edit-tool-properties" aria-describedby="users-selected-upper" aria-disabled="true" disabled>Remove selected users</button>
             <span id="users-selected-upper" class="users-selected-text" aria-live="polite">0 selected</span>
         </div>
         <div>
             <table id="appTable" class="rvt-table-cells rvt-table-compact rvt-m-top-md table-line-height-override">
-                <caption class="rvt-sr-only">Table with user information and checkboxes to select for removing them</caption>
+                <caption class="rvt-sr-only">Table of users enrolled in course. Select users to remove, then click Remove Selected Users to remove them from the course.</caption>
                 <thead>
                 <tr>
-                    <th scope="col" class="checkboxColumn" />
-                    <th scope="col">Name</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Section</th>
-                    <th scope="col">Date Added</th>
-                    <th scope="col">Last Activity Date</th>
+                    <td class="checkboxColumn" />
+                    <th scope="col" class="sorting">Name</th>
+                    <th scope="col" class="sorting">Username</th>
+                    <th scope="col" class="sorting">Role</th>
+                    <th scope="col" class="sorting">Section</th>
+                    <th scope="col" class="sorting">Date Added</th>
+                    <th scope="col" class="sorting">Last Activity Date</th>
                     <th/>
                     <th/>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="enrollmentDisplay : ${finalEnrollmentList}" th:data-is-dupe="${#arrays.contains(dupeUsernames, enrollmentDisplay.username)}">
-                    <th scope="row" class="checkboxColumn" />
-                    <td th:text="${enrollmentDisplay.displayName}" class="displayName">Banner, Bruce</td>
+                    <th scope="row" aria-label="Select user" class="checkboxColumn userCheckbox" />
+                    <td th:text="${enrollmentDisplay.displayName}" class="displayName" th:id="|${enrollmentDisplay.enrollmentId}-name|">Banner, Bruce</td>
                     <td th:text="${enrollmentDisplay.username}" class="username">bbanner</td>
                     <td th:text="${enrollmentDisplay.role}" class="role">Teacher</td>
                     <td th:text="${enrollmentDisplay.sectionName}" class="section">FA21-BL-CHEM-A123-12345</td>
@@ -117,8 +120,8 @@
             </table>
         </div>
         <div class="rvt-m-top-md">
-            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-rvt-dialog-trigger="edit-tool-properties" aria-describedby="users-selected" aria-disabled="true" disabled>Remove selected users</button>
-            <span id="users-selected_lower" class="users-selected-text">0 selected</span>
+            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-rvt-dialog-trigger="edit-tool-properties" aria-describedby="users-selected-lower" aria-disabled="true" disabled>Remove selected users</button>
+            <span id="users-selected-lower" class="users-selected-text">0 selected</span>
         </div>
 
         <!-- dialog box -->
