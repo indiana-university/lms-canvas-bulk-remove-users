@@ -55,7 +55,7 @@
     <properties>
         <app.version>${project.version}</app.version>
         <datatables.version>2.0.3</datatables.version>
-        <datatables-searchpanes.version>2.3.0</datatables-searchpanes.version>
+        <datatables-select.version>2.0.0</datatables-select.version>
         <denodo-hibernate-dialect.version>8.0.20201021</denodo-hibernate-dialect.version>
         <denodo-jdbc.version>8.0.2</denodo-jdbc.version>
         <git-commit-id-maven-plugin.version>8.0.2</git-commit-id-maven-plugin.version>
@@ -204,8 +204,8 @@
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
-            <artifactId>datatables-searchpanes</artifactId>
-            <version>${datatables-searchpanes.version}</version>
+            <artifactId>datatables-select</artifactId>
+            <version>${datatables-select.version}</version>
         </dependency>
     </dependencies>
 
