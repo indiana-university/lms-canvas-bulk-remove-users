@@ -109,8 +109,8 @@ function buildLmsFilter(datatablesSettings, options) {
         optionsHtml +=
             `<li>
                 <div class="rvt-checkbox">
-                    <input type="checkbox" id=${key} name="${filterId}-checkboxes" class="filter-input" value=${item} data-text=${item} onchange="filterCheckboxChange(this, ${colIdx}, '${filterId}')"/>
-                    <label for=${key} class="rvt-m-right-sm rvt-text-nobr">${item}</label>
+                    <input type="checkbox" id="${key}" name="${filterId}-checkboxes" class="filter-input" value="${item}" data-text="${item}" onchange="filterCheckboxChange(this, ${colIdx}, '${filterId}')"/>
+                    <label for="${key}" class="rvt-m-right-sm rvt-text-nobr">${item}</label>
                 </div>
             </li>`;
     });
@@ -180,7 +180,8 @@ function filterCheckboxChange(element, colIdx, filterIdPrefix) {
     let values = [];
     // Get all checked values
     $('input[type="checkbox"][name="' + element.name + '"].filter-input:checked').each(function() {
-        values.push($(this).val());
+        // Use exact match (value wrapped with ^ and $)
+        values.push("^" + $(this).val() + "$");
     });
 
     // Search for all selected values in the appropriate column
