@@ -35,6 +35,20 @@
     applyAccessibilityOverrides();
  });
 
+ // Get the input field
+ var input = document.getElementById("myInput");
+
+ // Execute a function when the user presses a key on the keyboard
+ input.addEventListener("keypress", function(event) {
+   // If the user presses the "Enter" key on the keyboard
+   if (event.key === "Enter") {
+     // Cancel the default action, if needed
+     event.preventDefault();
+     // Trigger the button element with a click
+     document.getElementById("myBtn").click();
+   }
+ });
+
 $('#appTable').on( 'draw.dt', function () {
     // after the table is drawn (on init, sort, search, etc) we need to apply the accessibility fixes again
     fixTableHeaders();
@@ -73,10 +87,10 @@ function userSelectedCounter() {
 }
 
 sortingNotify = function (sortHeader) {
-    var sortBy = sortHeader.text();
-    var direction = sortHeader.hasClass("sorting_asc") ? "ascending" : "descending";
+    let sortBy = sortHeader.text();
+    let currentSort = sortHeader.attr("aria-sort");
+    let direction = currentSort != null && currentSort == 'ascending' ? "descending" : "ascending";
     $("#sortingAnnc").text("Sorting by " + sortBy + " " + direction);
-    //fixTableHeaders();
 }
 
 
@@ -85,8 +99,14 @@ function addDescriptiveLabels() {
 }
 
 fixTableHeaders = function() {
+    // DT uses aria-label for its extra description on the sort headers. However, this means it is read on every
+    // cell in the table. The label should be the visual table header and the description should be the sorting instructions
     $("th.sorting").each( function() {
-        $(this).attr("aria-description", "Activate to sort");
+        let sortHeader = $(this);
+        let sortBy = sortHeader.text();
+        let currentSort = sortHeader.attr("aria-sort");
+        let direction = currentSort != null && currentSort == 'ascending' ? "descending" : "ascending";
+        $(this).attr("aria-description", "Activate to sort by " + sortBy + " " + direction);
         $(this).removeAttr("aria-label");
     });
 }
@@ -147,7 +167,6 @@ var table = $('#appTable').DataTable({
         {
             targets: [0],
             orderable: false,
-            searchPanes: { show: false },
             // The .8 and .7 are the column indexes containing the data that will be used for the checkbox value and name
             render: DataTable.render.select('.8', '.7')
         },
@@ -155,19 +174,23 @@ var table = $('#appTable').DataTable({
             targets: [7, 8],
             visible: false,
             searchable: false
+        },
+        {
+            // DataTables sorting defaults to third click removing sorting. This sets it to asc/desc only
+            targets: 'sorting',
+            orderSequence: ['asc', 'desc']
         }
        ],
-   language: {
-           aria: {
-               orderableReverse: '',
-               orderable: '',
-               orderableRemove: '',
 
+   language: {
+           select: {
+               aria: {
+                   headerCheckbox: 'Select all users'
+               }
            }
        },
    initComplete: function () {
        $('#appTable').wrap("<div style='overflow:auto;width:100%;position:relative;'></div>");
-//       labelCheckboxes();
    },
    select: {
         selector: 'th:first-child',

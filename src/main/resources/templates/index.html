@@ -54,13 +54,8 @@
     <div th:if="${errors}" class="rvt-alert rvt-alert--danger [ rvt-m-top-md ]" role="alert" aria-labelledby="error-alert-title" data-rvt-alert="error">
         <div class="rvt-alert__title" id="error-alert-title">Error</div>
         <p class="rvt-alert__message">There was an issue removing users. Please try again.</p>
-        <button class="rvt-alert__dismiss" data-rvt-alert-close>
-            <span class="rvt-sr-only">Close</span>
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                <path fill="currentColor" d="M9.41,8l5.29-5.29a1,1,0,0,0-1.41-1.41L8,6.59,2.71,1.29A1,1,0,0,0,1.29,2.71L6.59,8,1.29,13.29a1,1,0,1,0,1.41,1.41L8,9.41l5.29,5.29a1,1,0,0,0,1.41-1.41Z"/>
-            </svg>
-        </button>
     </div>
+
     <!-- main page -->
     <h1 id="bulk-remove-users-title" class="rvt-ts-32 rvt-p-tb-sm">Bulk Remove Users</h1>
     <span th:if="${finalEnrollmentList.isEmpty()}">SIS-enrolled users are not listed and cannot be removed with this tool.</span>
@@ -79,18 +74,20 @@
         </span>
     </div>
 
-    <span id="sortingAnnc" class="rvt-sr-only" aria-live="polite"></span>
-    <span id="searchText" hidden>Search for data within the table of users</span>
-
     <span th:if="not ${finalEnrollmentList.isEmpty()}">SIS-enrolled users are not listed and cannot be removed with this tool.</span>
     <form th:if="not ${finalEnrollmentList.isEmpty()}" id="bulk-remove-users-form" th:action="@{|/app/remove/${courseId}|}" method="post">
+
+        <span id="sortingAnnc" class="" aria-live="polite"></span>
+        <span id="searchText" hidden>Search for data within the table of users</span>
         <div class="rvt-m-top-md">
-            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-rvt-dialog-trigger="edit-tool-properties" aria-describedby="users-selected-upper" aria-disabled="true" disabled>Remove selected users</button>
+            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-rvt-dialog-trigger="edit-tool-properties" aria-describedby="users-selected-upper" aria-disabled="true" disabled>
+                Remove selected users
+            </button>
             <span id="users-selected-upper" class="users-selected-text" aria-live="polite">0 selected</span>
         </div>
         <div>
             <table id="appTable" class="rvt-table-cells rvt-table-compact rvt-m-top-md table-line-height-override">
-                <caption class="rvt-sr-only">Table of users enrolled in course. Select users to remove, then click Remove Selected Users to remove them from the course.</caption>
+                <caption class="rvt-sr-only">Table of users enrolled in course. Select users to remove, then click Remove Selected Users to remove them from the course. Column headers are sortable.</caption>
                 <thead>
                 <tr>
                     <td class="checkboxColumn" />
