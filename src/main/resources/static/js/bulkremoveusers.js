@@ -31,15 +31,17 @@
  * #L%
  */
 
- $(document).ready(function() {
-    applyAccessibilityOverrides();
- });
 
 $('#appTable').on( 'draw.dt', function () {
-    // after the table is drawn (on init, sort, search, etc) we need to apply the accessibility fixes again
+    // after the table is drawn (on init, sort, search, etc) we need to apply the table header accessibility fixes again
     fixTableHeaders();
-    labelCheckboxes();
+} )
 
+// since the sorting isn't an actual button, we have to manually handle the sorting events to trigger the SR messsage
+$( "th.sorting" ).on( "keypress", function(event) {
+    if (event.key === "Enter") {
+        sortingNotify($(this));
+    }
 } );
 
 $("th.sorting").click(function() {
@@ -72,6 +74,7 @@ function userSelectedCounter() {
     }
 }
 
+// Add SR notification of the sorting change
 sortingNotify = function (sortHeader) {
     let sortBy = sortHeader.text();
     let currentSort = sortHeader.attr("aria-sort");
@@ -79,12 +82,17 @@ sortingNotify = function (sortHeader) {
     $("#sortingAnnc").text("Sorting by " + sortBy + " " + direction);
 }
 
-
-function addDescriptiveLabels() {
-	$('div.dt-search').find('input[type=search]').attr('aria-describedby','searchText');
+addDescriptiveLabels = function () {
+    // Add SR search instructions
+	$('div.search-wrapper').find('input[type=search]').attr('aria-describedby','searchText');
 }
 
 fixTableHeaders = function() {
+    // remove the role=button from the inner span.  If DT insists on using roles instead of an actual button, it needs to be
+    // on the th tag since this is where they decided to put the tabindex
+    $("span.dt-column-title").removeAttr("role");
+    $("th.sorting").attr("role", "button");
+
     // DT uses aria-label for its extra description on the sort headers. However, this means it is read on every
     // cell in the table. The label should be the visual table header and the description should be the sorting instructions
     $("th.sorting").each( function() {
@@ -97,12 +105,11 @@ fixTableHeaders = function() {
     });
 }
 
-
 function applyAccessibilityOverrides() {
-
     // add more descriptive labels to the form elements with implicit labels
     addDescriptiveLabels();
-
+    // add meaningful labels to the checkboxes
+    labelCheckboxes();
 }
 
 $(".modalButton").click(function() {
@@ -145,7 +152,7 @@ $('#dialog-submit').click(function() {
 });
 
 // Customize a few of the search input related wrapper classes
-DataTable.ext.classes.search.input = 'rvt-m-left-sm';
+DataTable.ext.classes.search.input = 'rvt-m-left-xs';
 DataTable.ext.classes.search.container = 'rvt-p-top-md search-wrapper';
 
 var table = $('#appTable').DataTable({
@@ -155,6 +162,11 @@ var table = $('#appTable').DataTable({
    language: {
        // Setting the text for the search label, mostly to remove the colon that is there by default
        search: 'Search',
+       select: {
+          aria: {
+              headerCheckbox: 'Select all users'
+          }
+       }
    },
    columnDefs: [
         {
@@ -179,17 +191,11 @@ var table = $('#appTable').DataTable({
             orderSequence: ['asc', 'desc']
         }
        ],
-
-   language: {
-           select: {
-               aria: {
-                   headerCheckbox: 'Select all users'
-               }
-           }
-       },
    initComplete: function () {
        $('#appTable').wrap("<div style='overflow:auto;width:100%;position:relative;'></div>");
-       $('.search-wrapper label').addClass('rvt-label');
+       $('.search-wrapper label').addClass('rvt-label rvt-ts-16');
+
+       applyAccessibilityOverrides();
    },
    select: {
         selector: 'th:first-child',
