@@ -180,13 +180,22 @@ function filterCheckboxChange(element, colIdx, filterIdPrefix) {
     let values = [];
     // Get all checked values
     $('input[type="checkbox"][name="' + element.name + '"].filter-input:checked').each(function() {
-        // Use exact match (value wrapped with ^ and $)
-        values.push("^" + $(this).val() + "$");
+        values.push($(this).val());
     });
 
+    // Escape things, and use exact match (wrapped with ^ and $)
+    let regExpStr = values.map(function(val) { return "^" + escapeSpecialCharacters(val, "/") + "$" }).join("|");
+
     // Search for all selected values in the appropriate column
-    table.column(colIdx).search(values.join("|"), true, false).draw();
+    table.column(colIdx).search(regExpStr, true, false).draw();
     computeAndDisplayActiveFilters(filterIdPrefix);
+}
+
+/**
+ * Escape special characters in any search term
+ **/
+function escapeSpecialCharacters(str, delimiter) {
+    return (str + '').replace(new RegExp('[\&.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' + (delimiter || '') + '-]', 'g'), '\\$&');
 }
 
 /**

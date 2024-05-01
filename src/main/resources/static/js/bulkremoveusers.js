@@ -113,6 +113,10 @@ var table = $('#appTable').DataTable({
             // Enabling filters for these columns
             targets: [3, 4],
             lmsFilters: true
+        },
+        {
+            targets: [5, 6],
+            type: 'date'
         }
        ],
    initComplete: function () {
