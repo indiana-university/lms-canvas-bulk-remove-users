@@ -105,11 +105,12 @@ function buildLmsFilter(datatablesSettings, options) {
     filterOptions.each(function(item) {
         let itemId = item.replace(/\W/g,'_').toLowerCase();
         let key = filterId + "-" + itemId;
+        let escapedItem = DataTable.util.escapeHtml(item);
 
         optionsHtml +=
             `<li>
                 <div class="rvt-checkbox">
-                    <input type="checkbox" id="${key}" name="${filterId}-checkboxes" class="filter-input" value="${item}" data-text="${item}" onchange="filterCheckboxChange(this, ${colIdx}, '${filterId}')"/>
+                    <input type="checkbox" id="${key}" name="${filterId}-checkboxes" class="filter-input" value="${escapedItem}" data-text="${escapedItem}" onchange="filterCheckboxChange(this, ${colIdx}, '${filterId}')"/>
                     <label for="${key}" class="rvt-m-right-sm rvt-text-nobr">${item}</label>
                 </div>
             </li>`;
@@ -180,11 +181,11 @@ function filterCheckboxChange(element, colIdx, filterIdPrefix) {
     let values = [];
     // Get all checked values
     $('input[type="checkbox"][name="' + element.name + '"].filter-input:checked').each(function() {
-        values.push($(this).val());
+        values.push(DataTable.util.escapeRegex(htmlDecode($(this).val())));
     });
 
     // Escape things, and use exact match (wrapped with ^ and $)
-    let regExpStr = values.map(function(val) { return "^" + escapeSpecialCharacters(val, "/") + "$" }).join("|");
+    let regExpStr = values.map(function(val) { return "^" + val + "$" }).join("|");
 
     // Search for all selected values in the appropriate column
     table.column(colIdx).search(regExpStr, true, false).draw();
@@ -192,10 +193,11 @@ function filterCheckboxChange(element, colIdx, filterIdPrefix) {
 }
 
 /**
- * Escape special characters in any search term
+ * Decode any html characters in the value so that the original content can be searched on
+ * value - String to decode
  **/
-function escapeSpecialCharacters(str, delimiter) {
-    return (str + '').replace(new RegExp('[\&.\\\\+*?\\[\\^\\]$(){}=!<>|:\\' + (delimiter || '') + '-]', 'g'), '\\$&');
+function htmlDecode(value) {
+  return $("<textarea/>").html(value).text();
 }
 
 /**
