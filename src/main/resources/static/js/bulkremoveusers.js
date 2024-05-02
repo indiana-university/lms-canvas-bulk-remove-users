@@ -186,6 +186,10 @@ var table = $('#appTable').DataTable({
             lmsFilters: true
         },
         {
+            targets: [5, 6],
+            type: 'date'
+        },
+        {
             // DataTables sorting defaults to third click removing sorting. This sets it to asc/desc only
             targets: 'sorting',
             orderSequence: ['asc', 'desc']
