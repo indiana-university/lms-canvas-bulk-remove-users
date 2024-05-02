@@ -88,20 +88,22 @@ addDescriptiveLabels = function () {
 }
 
 fixTableHeaders = function() {
-    // remove the role=button from the inner span.  If DT insists on using roles instead of an actual button, it needs to be
-    // on the th tag since this is where they decided to put the tabindex
+    // We are replacing the wonky th that currently uses tabindex and role=button with an actual button. Remove the tabindex and role
     $("span.dt-column-title").removeAttr("role");
-    $("th.sorting").attr("role", "button");
+    $("th.sorting").removeAttr("tabindex");
 
     // DT uses aria-label for its extra description on the sort headers. However, this means it is read on every
     // cell in the table. The label should be the visual table header and the description should be the sorting instructions
     $("th.sorting").each( function() {
         let sortHeader = $(this);
+        $(this).removeAttr("aria-label");
+
         let sortBy = sortHeader.text();
         let currentSort = sortHeader.attr("aria-sort");
         let direction = currentSort != null && currentSort == 'ascending' ? "descending" : "ascending";
-        $(this).attr("aria-description", "Activate to sort by " + sortBy + " " + direction);
-        $(this).removeAttr("aria-label");
+
+        let sortButton = sortHeader.find("button")[0];
+        $(sortButton).attr("aria-description", "Activate to sort by " + sortBy + " " + direction);
     });
 }
 
