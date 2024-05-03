@@ -124,6 +124,7 @@
              id="edit-tool-properties"
              role="dialog"
              tabindex="-1"
+             aria-modal="true"
              aria-labelledby="edit-tool-properties-dialog"
              aria-describedby="edit-tool-properties-dialog-description"
              data-rvt-dialog="edit-tool-properties"
@@ -142,6 +143,10 @@
                     <button id="dialog-cancel" type="button" class="rvt-button rvt-button--secondary" data-rvt-dialog-close="edit-tool-properties">Cancel</button>
                     <button id="dialog-submit" type="submit" class="rvt-button">
                         <span class="rvt-button__content">Yes, remove</span>
+                        <div id="remove-users-loader" class="rvt-loader rvt-loader--xs rvt-display-none"></div>
+                        <span aria-live="polite">
+                            <span id="remove-users-sr-text" class="rvt-sr-only rvt-display-none">Removing users</span>
+                        </span>
                     </button>
                 </div>
             </div>

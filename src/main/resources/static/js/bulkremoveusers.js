@@ -31,34 +31,6 @@
  * #L%
  */
 
-
-$('#appTable').on( 'draw.dt', function () {
-    // after the table is drawn (on init, sort, search, etc) we need to apply the table header accessibility fixes again
-    fixTableHeaders();
-} )
-
-// since the sorting isn't an actual button, we have to manually handle the sorting events to trigger the SR messsage
-$( "th.sorting" ).on( "keypress", function(event) {
-    if (event.key === "Enter") {
-        sortingNotify($(this));
-    }
-} );
-
-$("th.sorting").click(function() {
-    sortingNotify($(this));
-});
-
-function labelCheckboxes() {
-    $("th.userCheckbox").each( function() {
-        // need to add a label pointing to the user's name in the username column
-        let usernameCol = $(this).closest('tr').find('td.displayName')[0];
-        let userCB = $(this).find('input[type=checkbox]')[0];
-        $(userCB).attr("aria-labelledby", usernameCol.id);
-        $(userCB).removeAttr("aria-label");
-    });
-}
-
-
 function userSelectedCounter() {
     // Get all the selected checkboxes, except the "select-all" one up in the table header
     let newValue = document.querySelectorAll('input.dt-select-checkbox:checked:not(.header-checkbox)').length;
@@ -72,46 +44,6 @@ function userSelectedCounter() {
         $(".modalButton").attr('disabled', '');
         $(".modalButton").attr('aria-disabled', 'true');
     }
-}
-
-// Add SR notification of the sorting change
-sortingNotify = function (sortHeader) {
-    let sortBy = sortHeader.text();
-    let currentSort = sortHeader.attr("aria-sort");
-    let direction = currentSort != null && currentSort == 'ascending' ? "descending" : "ascending";
-    $("#sortingAnnc").text("Sorting by " + sortBy + " " + direction);
-}
-
-addDescriptiveLabels = function () {
-    // Add SR search instructions
-	$('div.search-wrapper').find('input[type=search]').attr('aria-describedby','searchText');
-}
-
-fixTableHeaders = function() {
-    // We are replacing the wonky th that currently uses tabindex and role=button with an actual button. Remove the tabindex and role
-    $("span.dt-column-title").removeAttr("role");
-    $("th.sorting").removeAttr("tabindex");
-
-    // DT uses aria-label for its extra description on the sort headers. However, this means it is read on every
-    // cell in the table. The label should be the visual table header and the description should be the sorting instructions
-    $("th.sorting").each( function() {
-        let sortHeader = $(this);
-        $(this).removeAttr("aria-label");
-
-        let sortBy = sortHeader.text();
-        let currentSort = sortHeader.attr("aria-sort");
-        let direction = currentSort != null && currentSort == 'ascending' ? "descending" : "ascending";
-
-        let sortButton = sortHeader.find("button")[0];
-        $(sortButton).attr("aria-description", "Activate to sort by " + sortBy + " " + direction);
-    });
-}
-
-function applyAccessibilityOverrides() {
-    // add more descriptive labels to the form elements with implicit labels
-    addDescriptiveLabels();
-    // add meaningful labels to the checkboxes
-    labelCheckboxes();
 }
 
 $(".modalButton").click(function() {
@@ -143,7 +75,8 @@ $('#dialog-submit').click(function() {
     button.addClass("rvt-button--loading");
     button.prop('disabled', 'true');
     button.attr('aria-busy', 'true');
-    button.append('<div class="rvt-loader rvt-loader--xs" aria-label="Content loading"></div>');
+    $("#remove-users-loader").removeClass("rvt-display-none");
+    $("#remove-users-sr-text").removeClass("rvt-display-none");
 
     // disable the cancel button
     $("#dialog-cancel").attr('disabled', '');
@@ -152,6 +85,71 @@ $('#dialog-submit').click(function() {
     // Some browsers need this to have submissions work correctly
     $('#bulk-remove-users-form').submit();
 });
+
+$('#appTable').on( 'draw.dt', function () {
+    // after the table is drawn (on init, sort, search, etc) we need to apply the table header accessibility fixes again
+    fixTableHeaders();
+} )
+
+function fixTableHeaders() {
+    // We are replacing the wonky th that currently uses tabindex and role=button with an actual button. Remove the tabindex and role
+    $("span.dt-column-title").removeAttr("role");
+    $("th.sorting").removeAttr("aria-label tabindex");
+
+    // DT uses aria-label for its extra description on the sort headers. However, this means it is read on every
+    // cell in the table. The label should be the visual table header and the description should be the sorting instructions
+    $("th.sorting").each( function() {
+        let sortHeader = $(this);
+        let sortBy = sortHeader.text();
+        let currentSort = sortHeader.attr("aria-sort");
+        let direction = currentSort != null && currentSort == 'ascending' ? "descending" : "ascending";
+
+        // we added a button to the th for accessibility. Set the aria-description for it
+        let sortButton = sortHeader.find("button")[0];
+        $(sortButton).attr("aria-description", "Activate to sort by " + sortBy + " " + direction);
+    });
+}
+
+// DT uses an event handler on the th instead of a button, so we have to manually handle the sorting events to trigger the SR messsage
+$( "th.sorting" ).on( "keypress", function(event) {
+    if (event.key === "Enter") {
+        sortingNotify($(this));
+    }
+} );
+
+$("th.sorting").click(function() {
+    sortingNotify($(this));
+});
+
+// Add SR notification of the sorting change
+function sortingNotify(sortHeader) {
+    let sortBy = sortHeader.text();
+    let currentSort = sortHeader.attr("aria-sort");
+    let direction = currentSort != null && currentSort == 'ascending' ? "descending" : "ascending";
+    $("#sortingAnnc").text("Sorting by " + sortBy + " " + direction);
+}
+
+function labelCheckboxes() {
+    $("th.userCheckbox").each( function() {
+        // need to add a label pointing to the user's name in the username column
+        let usernameCol = $(this).closest('tr').find('td.displayName')[0];
+        let userCB = $(this).find('input[type=checkbox]')[0];
+        $(userCB).attr("aria-labelledby", usernameCol.id);
+        $(userCB).removeAttr("aria-label");
+    });
+}
+
+function addDescriptiveLabels() {
+    // Add SR search instructions
+	$('div.search-wrapper').find('input[type=search]').attr('aria-describedby','searchText');
+}
+
+function applyAccessibilityOverrides() {
+    // add more descriptive labels to the form elements with implicit labels
+    addDescriptiveLabels();
+    // add meaningful labels to the checkboxes
+    labelCheckboxes();
+}
 
 // Customize a few of the search input related wrapper classes
 DataTable.ext.classes.search.input = 'rvt-m-left-xs';
