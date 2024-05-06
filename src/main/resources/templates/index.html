@@ -54,12 +54,6 @@
     <div th:if="${errors}" class="rvt-alert rvt-alert--danger [ rvt-m-top-md ]" role="alert" aria-labelledby="error-alert-title" data-rvt-alert="error">
         <div class="rvt-alert__title" id="error-alert-title">Error</div>
         <p class="rvt-alert__message">There was an issue removing users. Please try again.</p>
-        <button class="rvt-alert__dismiss" data-rvt-alert-close>
-            <span class="rvt-sr-only">Close</span>
-            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
-                <path fill="currentColor" d="M9.41,8l5.29-5.29a1,1,0,0,0-1.41-1.41L8,6.59,2.71,1.29A1,1,0,0,0,1.29,2.71L6.59,8,1.29,13.29a1,1,0,1,0,1.41,1.41L8,9.41l5.29,5.29a1,1,0,0,0,1.41-1.41Z"/>
-            </svg>
-        </button>
     </div>
     <!-- main page -->
     <h1 id="bulk-remove-users-title" class="rvt-ts-32 rvt-p-tb-sm">Bulk Remove Users</h1>
@@ -80,31 +74,35 @@
     </div>
 
     <span th:if="not ${finalEnrollmentList.isEmpty()}">SIS-enrolled users are not listed and cannot be removed with this tool.</span>
+
+    <span id="sortingAnnc" class="rvt-sr-only" aria-live="polite"></span>
+    <span id="searchText" hidden>Search for data within the table of users</span>
+
     <form th:if="not ${finalEnrollmentList.isEmpty()}" id="bulk-remove-users-form" th:action="@{|/app/remove/${courseId}|}" method="post">
         <div class="rvt-m-top-md">
-            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-rvt-dialog-trigger="edit-tool-properties" aria-describedby="users-selected" aria-disabled="true" disabled>Remove selected users</button>
+            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-rvt-dialog-trigger="edit-tool-properties" aria-describedby="users-selected-upper" aria-disabled="true" disabled>Remove selected users</button>
             <span id="users-selected-upper" class="users-selected-text" aria-live="polite">0 selected</span>
         </div>
         <div>
             <table id="appTable" class="rvt-table-cells rvt-table-compact rvt-m-top-md table-line-height-override">
-                <caption class="rvt-sr-only">Table with user information and checkboxes to select for removing them</caption>
+                <caption class="rvt-sr-only">Table of users enrolled in course. Select users to remove, then click Remove Selected Users to remove them from the course. Column headers are sortable.</caption>
                 <thead>
                 <tr>
-                    <th scope="col" class="checkboxColumn" />
-                    <th scope="col">Name</th>
-                    <th scope="col">Username</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Section</th>
-                    <th scope="col">Date Added</th>
-                    <th scope="col">Last Activity Date</th>
+                    <td class="checkboxColumn" />
+                    <th scope="col" class="sorting"><button type="button">Name</button></th>
+                    <th scope="col" class="sorting"><button type="button">Username</button></th>
+                    <th scope="col" class="sorting"><button type="button">Role</button></th>
+                    <th scope="col" class="sorting"><button type="button">Section</button></th>
+                    <th scope="col" class="sorting"><button type="button">Date Added</button></th>
+                    <th scope="col" class="sorting"><button type="button">Last Activity Date</button></th>
                     <th/>
                     <th/>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="enrollmentDisplay : ${finalEnrollmentList}" th:data-is-dupe="${#arrays.contains(dupeUsernames, enrollmentDisplay.username)}">
-                    <th scope="row" class="checkboxColumn" />
-                    <td th:text="${enrollmentDisplay.displayName}" class="displayName">Banner, Bruce</td>
+                    <th scope="row" class="checkboxColumn userCheckbox" />
+                    <td th:text="${enrollmentDisplay.displayName}" class="displayName" th:id="|${enrollmentDisplay.enrollmentId}-name|">Banner, Bruce</td>
                     <td th:text="${enrollmentDisplay.username}" class="username">bbanner</td>
                     <td th:text="${enrollmentDisplay.role}" class="role">Teacher</td>
                     <td th:text="${enrollmentDisplay.sectionName}" class="section">FA21-BL-CHEM-A123-12345</td>
@@ -117,8 +115,8 @@
             </table>
         </div>
         <div class="rvt-m-top-md">
-            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-rvt-dialog-trigger="edit-tool-properties" aria-describedby="users-selected" aria-disabled="true" disabled>Remove selected users</button>
-            <span id="users-selected_lower" class="users-selected-text">0 selected</span>
+            <button type="button" class="rvt-button rvt-m-right-xs modalButton" data-rvt-dialog-trigger="edit-tool-properties" aria-describedby="users-selected-lower" aria-disabled="true" disabled>Remove selected users</button>
+            <span id="users-selected-lower" class="users-selected-text">0 selected</span>
         </div>
 
         <!-- dialog box -->
@@ -126,6 +124,7 @@
              id="edit-tool-properties"
              role="dialog"
              tabindex="-1"
+             aria-modal="true"
              aria-labelledby="edit-tool-properties-dialog"
              aria-describedby="edit-tool-properties-dialog-description"
              data-rvt-dialog="edit-tool-properties"
@@ -141,10 +140,14 @@
                     <ul class="rvt-list-plain modal-list"></ul>
                 </div>
                 <div class="rvt-dialog__controls">
+                    <button id="dialog-cancel" type="button" class="rvt-button rvt-button--secondary" data-rvt-dialog-close="edit-tool-properties">Cancel</button>
                     <button id="dialog-submit" type="submit" class="rvt-button">
                         <span class="rvt-button__content">Yes, remove</span>
+                        <div id="remove-users-loader" class="rvt-loader rvt-loader--xs rvt-display-none"></div>
+                        <span aria-live="polite">
+                            <span id="remove-users-sr-text" class="rvt-sr-only rvt-display-none">Removing users</span>
+                        </span>
                     </button>
-                    <button id="dialog-cancel" type="button" class="rvt-button rvt-button--secondary" data-rvt-dialog-close="edit-tool-properties">Cancel</button>
                 </div>
             </div>
         </div>

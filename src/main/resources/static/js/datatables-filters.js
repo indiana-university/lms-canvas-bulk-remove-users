@@ -117,14 +117,14 @@ function buildLmsFilter(datatablesSettings, options) {
     });
 
     let container =
-        `<div class="rvt-dropdown rvt-p-top-xs rvt-m-right-sm-md-up" role="region" aria-label="Controls for filtering participants in roster" data-rvt-dropdown="dropdown-filter">
+        `<div class="rvt-dropdown rvt-p-top-xs rvt-m-right-sm-md-up" role="region" aria-label="Controls for filtering users by ${filterName}" data-rvt-dropdown="${filterId}-dropdown-filter">
               <div id="${filterId}-selected-text" class="rvt-sr-only" aria-live="polite"></div>
               <button id="${filterId}-button" type="button" class="rvt-button rvt-button--secondary transparencyOverride" data-rvt-dropdown-toggle="${filterId}-filter-options">
                   <span class="rvt-dropdown__toggle-text">Filter By ${filterName} <span id="${filterId}-filters-active"></span></span>
                   <svg aria-hidden="true" fill="currentColor" width="16" height="16" viewBox="0 0 16 16"><path d="m15.146 6.263-1.292-1.526L8 9.69 2.146 4.737.854 6.263 8 12.31l7.146-6.047Z"></path></svg>
               </button>
               <div id="${filterId}-dropdown" class="rvt-dropdown__menu" data-rvt-dropdown-menu="${filterId}-filter-options" hidden>
-                  <button id="${filterId}-remove-filters" type="button" aria-describedby="${filterId}-filter-count" class="rvt-button rvt-button--secondary" onclick="clearFilter('${filterId}-checkboxes', ${colIdx}, '${filterId}')">Remove Filters</button>
+                  <button id="${filterId}-remove-filters" type="button" aria-describedby="${filterId}-filter-count" class="rvt-button rvt-button--secondary" onclick="clearFilter('${filterId}-checkboxes', ${colIdx}, '${filterId}')">Remove ${filterName} Filters</button>
                   <span id="${filterId}-filter-count" class="rvt-sr-only">No filters currently selected</span>
                   <div id="${filterId}-division">
                       <fieldset class="rvt-fieldset rvt-p-left-sm">
