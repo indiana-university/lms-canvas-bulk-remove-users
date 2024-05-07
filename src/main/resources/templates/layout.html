@@ -42,11 +42,13 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link media="all" rel="stylesheet" type="text/css" th:href="@{/app/jsrivet/rivet.min.css}" />
+    <link rel="stylesheet" type="text/css" th:href="@{/app/webjars/datatables/css/dataTables.dataTables.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/app/webjars/datatables-select/css/select.dataTables.min.css}"/>
     <link media="all" rel="stylesheet" type="text/css" th:href="@{/app/css/bulkremoveusers.css}"/>
 </head>
 <body>
 
-<div layout:fragment="content" class="rvt-container-xl" aria-labelledby="bulk-remove-users-title">
+<div layout:fragment="content" class="rvt-container-xl" role="main" aria-labelledby="bulk-remove-users-title">
     Page content goes here
     <!--
         add something like this to the child page to complete the page layout
@@ -70,6 +72,9 @@
 
 <script type="text/javascript" th:src="@{/app/jsrivet/rivet.min.js}"></script>
 <script type="text/javascript" th:src="@{/app/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/app/webjars/datatables/js/dataTables.min.js}"></script>
+<script type="text/javascript" th:src="@{/app/webjars/datatables-select/js/dataTables.select.min.js}"></script>
+<script type="text/javascript" th:src="@{/app/js/datatables-filters.js}"></script>
 <script type="text/javascript" th:src="@{/app/js/bulkremoveusers.js}"></script>
 <script>
   Rivet.init();

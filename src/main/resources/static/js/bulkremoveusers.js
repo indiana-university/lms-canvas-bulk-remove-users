@@ -30,128 +30,11 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  * #L%
  */
-$('#checkbox-all').change(function() {
-    var checkboxes = $(this).closest('form').find(':checkbox');
-    checkboxes.prop('checked', $(this).is(':checked'));
-    $("#checkbox-teachers").prop("indeterminate", false);
-    $("#checkbox-students").prop("indeterminate", false);
-    $("#checkbox-tas").prop("indeterminate", false);
-    $("#checkbox-designers").prop("indeterminate", false);
-    $("#checkbox-observers").prop("indeterminate", false);
-    userSelectedCounter();
-});
-
-$('#checkbox-teachers').change(function() {
-    var checkboxes = $(this).closest('form').find(':checkbox[data-attribute="TeacherEnrollment"]');
-    checkboxes.prop('checked', $(this).is(':checked'));
-    userSelectedCounter();
-    updateAllUsersBox();
-});
-
-$('#checkbox-students').change(function() {
-    var checkboxes = $(this).closest('form').find(':checkbox[data-attribute="StudentEnrollment"]');
-    checkboxes.prop('checked', $(this).is(':checked'));
-    userSelectedCounter();
-    updateAllUsersBox();
-});
-
-$('#checkbox-tas').change(function() {
-    var checkboxes = $(this).closest('form').find(':checkbox[data-attribute="TaEnrollment"]');
-    checkboxes.prop('checked', $(this).is(':checked'));
-    userSelectedCounter();
-    updateAllUsersBox();
-});
-
-$('#checkbox-designers').change(function() {
-    var checkboxes = $(this).closest('form').find(':checkbox[data-attribute="DesignerEnrollment"]');
-    checkboxes.prop('checked', $(this).is(':checked'));
-    userSelectedCounter();
-    updateAllUsersBox();
-});
-
-$('#checkbox-observers').change(function() {
-    var checkboxes = $(this).closest('form').find(':checkbox[data-attribute="ObserverEnrollment"]');
-    checkboxes.prop('checked', $(this).is(':checked'));
-    userSelectedCounter();
-    updateAllUsersBox();
-});
-
-$('input[name="user"]').click(function() {
-    // All users section
-    updateAllUsersBox();
-
-    // Teachers section
-    var teacherTotal = $(this).closest('form').find(':checkbox[data-attribute="TeacherEnrollment"]').length;
-    var teacherChecked = $(this).closest('form').find(':checkbox[data-attribute="TeacherEnrollment"]:checked').length;
-
-    if (teacherChecked == 0) {
-        $("#checkbox-teachers").prop("checked", false);
-        $("#checkbox-teachers").prop("indeterminate", false);
-    } else if (teacherTotal == teacherChecked) {
-        $("#checkbox-teachers").prop("checked", true);
-        $("#checkbox-teachers").prop("indeterminate", false);
-    } else {
-        $("#checkbox-teachers").prop("indeterminate", true);
-    }
-
-    // Students section
-    var studentTotal = $(this).closest('form').find(':checkbox[data-attribute="StudentEnrollment"]').length;
-    var studentChecked = $(this).closest('form').find(':checkbox[data-attribute="StudentEnrollment"]:checked').length;
-    if (studentChecked == 0) {
-        $("#checkbox-students").prop("checked", false);
-        $("#checkbox-students").prop("indeterminate", false);
-    } else if (studentTotal == studentChecked) {
-        $("#checkbox-students").prop("checked", true);
-        $("#checkbox-students").prop("indeterminate", false);
-    } else {
-        $("#checkbox-students").prop("indeterminate", true);
-    }
-
-    // TAs section
-    var taTotal = $(this).closest('form').find(':checkbox[data-attribute="TaEnrollment"]').length;
-    var taChecked = $(this).closest('form').find(':checkbox[data-attribute="TaEnrollment"]:checked').length;
-    if (taChecked == 0) {
-        $("#checkbox-tas").prop("checked", false);
-        $("#checkbox-tas").prop("indeterminate", false);
-    } else if (taTotal == taChecked) {
-        $("#checkbox-tas").prop("checked", true);
-        $("#checkbox-tas").prop("indeterminate", false);
-    } else {
-        $("#checkbox-tas").prop("indeterminate", true);
-    }
-
-    // Designers section
-    var designerTotal = $(this).closest('form').find(':checkbox[data-attribute="DesignerEnrollment"]').length;
-    var designerChecked = $(this).closest('form').find(':checkbox[data-attribute="DesignerEnrollment"]:checked').length;
-    if (designerChecked == 0) {
-        $("#checkbox-designers").prop("checked", false);
-        $("#checkbox-designers").prop("indeterminate", false);
-    } else if (designerTotal == designerChecked) {
-        $("#checkbox-designers").prop("checked", true);
-        $("#checkbox-designers").prop("indeterminate", false);
-    } else {
-        $("#checkbox-designers").prop("indeterminate", true);
-    }
-
-    // Observers section
-    var observerTotal = $(this).closest('form').find(':checkbox[data-attribute="ObserverEnrollment"]').length;
-    var observerChecked = $(this).closest('form').find(':checkbox[data-attribute="ObserverEnrollment"]:checked').length;
-    if (observerChecked == 0) {
-        $("#checkbox-observers").prop("checked", false);
-        $("#checkbox-observers").prop("indeterminate", false);
-    } else if (observerTotal == observerChecked) {
-        $("#checkbox-observers").prop("checked", true);
-        $("#checkbox-observers").prop("indeterminate", false);
-    } else {
-        $("#checkbox-observers").prop("indeterminate", true);
-    }
-
-    userSelectedCounter();
-});
 
 function userSelectedCounter() {
-    var newValue = document.querySelectorAll('input[name="user"]:checked').length;
-    $("#users-selected").text(newValue + ' selected');
+    // Get all the selected checkboxes, except the "select-all" one up in the table header
+    let newValue = document.querySelectorAll('input.dt-select-checkbox:checked:not(.header-checkbox)').length;
+    $(".users-selected-text").text(newValue + ' selected');
 
     // enable/disable buttons while we're in here
     if (newValue > 0) {
@@ -163,54 +46,37 @@ function userSelectedCounter() {
     }
 }
 
-function updateAllUsersBox() {
-    // All users section
-    var allTotal = document.querySelectorAll('input[name="user"]').length;
-    var allChecked = document.querySelectorAll('input[name="user"]:checked').length;
-    if (allTotal == allChecked) {
-        $("#checkbox-all").prop("checked", true);
-        $("#checkbox-all").prop("indeterminate", false);
-    } else if (allChecked == 0) {
-        $("#checkbox-all").prop("checked", false);
-        $("#checkbox-all").prop("indeterminate", false);
-    } else {
-        $("#checkbox-all").prop("indeterminate", true);
-    }
-}
-
 $(".modalButton").click(function() {
     // find the modal body
-    var modalList = $("#edit-tool-properties").find(".modal-list");
+    let modalList = $("#edit-tool-properties").find(".modal-list");
 
     // clear the ul, in case a cancel button happened
     $(modalList).empty();
 
-    // loop through all the check boxes (class checkbox)
-    $('input[name="user"]').each(function(index) {
-        // if they are checked, add them to the modal
-        if($(this).is(":checked")) {
-            var displayName = $(this).closest('tr').find('.displayName').text();
-            var username = $(this).closest('tr').find('.username').text();
-            var dupeBonus = "";
-            var isDupe = (this.getAttribute('data-is-dupe') === 'true');
-            if (isDupe) {
-                separator = " - ";
-                var role = $(this).closest('tr').find('.role').text();
-                var section = $(this).closest('tr').find('.section').text();
-                dupeBonus = " - " + role + " (" + section + ")";
-            }
-            $(modalList).append("<li>" + displayName + " (" + username + ")" + dupeBonus + "</li>")
+    // loop through all the non-header checked check boxes (class checkbox)
+    $('input.dt-select-checkbox:checked:not(.header-checkbox)').each(function(index) {
+        let displayName = $(this).closest('tr').find('.displayName').text();
+        let username = $(this).closest('tr').find('.username').text();
+        let dupeBonus = "";
+        let isDupe = ($(this).closest('tr').attr('data-is-dupe') === 'true');
+        if (isDupe) {
+            separator = " - ";
+            let role = $(this).closest('tr').find('.role').text();
+            let section = $(this).closest('tr').find('.section').text();
+            dupeBonus = " - " + role + " (" + section + ")";
         }
+        $(modalList).append("<li>" + displayName + " (" + username + ")" + dupeBonus + "</li>")
     });
 });
 
 $('#dialog-submit').click(function() {
     // set all the loading icon things for the 'Yes, remove' button
-    var button = $(this);
+    let button = $(this);
     button.addClass("rvt-button--loading");
     button.prop('disabled', 'true');
     button.attr('aria-busy', 'true');
-    button.append('<div class="rvt-loader rvt-loader--xs" aria-label="Content loading"></div>');
+    $("#remove-users-loader").removeClass("rvt-display-none");
+    $("#remove-users-sr-text").removeClass("rvt-display-none");
 
     // disable the cancel button
     $("#dialog-cancel").attr('disabled', '');
@@ -218,4 +84,145 @@ $('#dialog-submit').click(function() {
 
     // Some browsers need this to have submissions work correctly
     $('#bulk-remove-users-form').submit();
+});
+
+$('#appTable').on( 'draw.dt', function () {
+    // after the table is drawn (on init, sort, search, etc) we need to apply the table header accessibility fixes again
+    fixTableHeaders();
+} )
+
+function fixTableHeaders() {
+    // We are replacing the wonky th that currently uses tabindex and role=button with an actual button. Remove the tabindex and role
+    $("span.dt-column-title").removeAttr("role");
+    $("th.sorting").removeAttr("aria-label tabindex");
+
+    // DT uses aria-label for its extra description on the sort headers. However, this means it is read on every
+    // cell in the table. The label should be the visual table header and the description should be the sorting instructions
+    $("th.sorting").each( function() {
+        let sortHeader = $(this);
+        let sortBy = sortHeader.text();
+        let currentSort = sortHeader.attr("aria-sort");
+        let direction = currentSort != null && currentSort == 'ascending' ? "descending" : "ascending";
+
+        // we added a button to the th for accessibility. Set the aria-description for it
+        let sortButton = sortHeader.find("button")[0];
+        $(sortButton).attr("aria-description", "Activate to sort by " + sortBy + " " + direction);
+    });
+}
+
+// DT uses an event handler on the th instead of a button, so we have to manually handle the sorting events to trigger the SR messsage
+$( "th.sorting" ).on( "keypress", function(event) {
+    if (event.key === "Enter") {
+        sortingNotify($(this));
+    }
+} );
+
+$("th.sorting").click(function() {
+    sortingNotify($(this));
+});
+
+// Add SR notification of the sorting change
+function sortingNotify(sortHeader) {
+    let sortBy = sortHeader.text();
+    let currentSort = sortHeader.attr("aria-sort");
+    let direction = currentSort != null && currentSort == 'ascending' ? "descending" : "ascending";
+    $("#sortingAnnc").text("Sorting by " + sortBy + " " + direction);
+}
+
+function labelCheckboxes() {
+    $("th.userCheckbox").each( function() {
+        // need to add a label pointing to the user's name in the username column
+        let usernameCol = $(this).closest('tr').find('td.displayName')[0];
+        let userCB = $(this).find('input[type=checkbox]')[0];
+        $(userCB).attr("aria-labelledby", usernameCol.id);
+        $(userCB).removeAttr("aria-label");
+    });
+}
+
+function addDescriptiveLabels() {
+    // Add SR search instructions
+	$('div.search-wrapper').find('input[type=search]').attr('aria-describedby','searchText');
+}
+
+function applyAccessibilityOverrides() {
+    // add more descriptive labels to the form elements with implicit labels
+    addDescriptiveLabels();
+    // add meaningful labels to the checkboxes
+    labelCheckboxes();
+}
+
+// Customize a few of the search input related wrapper classes
+DataTable.ext.classes.search.input = 'rvt-m-left-xs';
+DataTable.ext.classes.search.container = 'rvt-p-top-md search-wrapper';
+
+var table = $('#appTable').DataTable({
+   orderCellsTop: true,
+   paging: false,
+   order: [[1, 'asc']],
+   language: {
+       // Setting the text for the search label, mostly to remove the colon that is there by default
+       search: 'Search',
+       select: {
+          aria: {
+              headerCheckbox: 'Select all users'
+          }
+       }
+   },
+   columnDefs: [
+        {
+            targets: [0],
+            orderable: false,
+            // The .8 and .7 are the column indexes containing the data that will be used for the checkbox value and name
+            render: DataTable.render.select('.8', '.7')
+        },
+        {
+            targets: [7, 8],
+            visible: false,
+            searchable: false
+        },
+        {
+            // Enabling filters for these columns
+            targets: [3, 4],
+            lmsFilters: true
+        },
+        {
+            targets: [5, 6],
+            type: 'date'
+        },
+        {
+            // DataTables sorting defaults to third click removing sorting. This sets it to asc/desc only
+            targets: 'sorting',
+            orderSequence: ['asc', 'desc']
+        }
+       ],
+   initComplete: function () {
+       $('#appTable').wrap("<div style='overflow:auto;width:100%;position:relative;'></div>");
+       $('.search-wrapper label').addClass('rvt-label rvt-ts-16');
+
+       applyAccessibilityOverrides();
+   },
+   select: {
+        selector: 'th:first-child',
+        style: 'multi',
+        info: false
+   },
+   layout: {
+       topStart: {
+           // Configuration for the filters
+           lmsFilters: {
+               containerClass: 'rvt-flex-md-up rvt-p-top-md',
+               includeClearFilters: true
+           }
+       },
+   }
+});
+
+// Mark the autogenerated checkbox that ends up in the header with a special class, so it can be excluded from actual selected rows
+$('thead input[type=checkbox]').addClass('header-checkbox');
+
+// Adding event listeners so that we can update controls based on "external" events
+table.on('select deselect user-select filter-update draw', function () {
+    // Update selected counts after row (de)selections and filters
+    // The draw event catches the regular search filtering
+    userSelectedCounter();
 });
