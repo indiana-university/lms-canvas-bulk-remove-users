@@ -88,20 +88,20 @@
                 <caption class="rvt-sr-only">Table of users enrolled in course. Select users to remove, then click Remove Selected Users to remove them from the course. Column headers are sortable.</caption>
                 <thead>
                 <tr>
-                    <td class="checkboxColumn" />
-                    <th scope="col" class="sorting"><button type="button">Name</button></th>
-                    <th scope="col" class="sorting"><button type="button">Username</button></th>
-                    <th scope="col" class="sorting"><button type="button">Role</button></th>
-                    <th scope="col" class="sorting"><button type="button">Section</button></th>
-                    <th scope="col" class="sorting"><button type="button">Date Added</button></th>
-                    <th scope="col" class="sorting"><button type="button">Last Activity Date</button></th>
-                    <th/>
-                    <th/>
+                    <td class="checkboxColumn colCheckbox" />
+                    <th scope="col" class="colName">Name</th>
+                    <th scope="col" class="colUsername">Username</th>
+                    <th scope="col" class="colRole">Role</th>
+                    <th scope="col" class="colSection">Section</th>
+                    <th scope="col" class="colAdded">Date Added</th>
+                    <th scope="col" class="colLastAct">Last Activity Date</th>
+                    <th class="colCheckboxName"/>
+                    <th class="colEnrlId"/>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="enrollmentDisplay : ${finalEnrollmentList}" th:data-is-dupe="${#arrays.contains(dupeUsernames, enrollmentDisplay.username)}">
-                    <th scope="row" class="checkboxColumn userCheckbox" />
+                    <th scope="row" class="checkboxColumn rowCheckbox" />
                     <td th:text="${enrollmentDisplay.displayName}" class="displayName" th:id="|${enrollmentDisplay.enrollmentId}-name|">Banner, Bruce</td>
                     <td th:text="${enrollmentDisplay.username}" class="username">bbanner</td>
                     <td th:text="${enrollmentDisplay.role}" class="role">Teacher</td>
