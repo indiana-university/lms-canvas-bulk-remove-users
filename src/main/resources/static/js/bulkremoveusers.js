@@ -90,6 +90,9 @@ $('#dialog-submit').click(function() {
 DataTable.ext.classes.search.input = 'rvt-m-left-xs';
 DataTable.ext.classes.search.container = 'rvt-p-top-md search-wrapper';
 
+// DataTables sorting defaults to third click removing sorting. This sets it to asc/desc only
+DataTable.defaults.column.orderSequence = ['asc', 'desc'];
+
 var table = $('#appTable').DataTable({
    orderCellsTop: true,
    paging: false,
@@ -126,11 +129,6 @@ var table = $('#appTable').DataTable({
         {
             targets: ['.colAdded', '.colLastAct'],
             type: 'date'
-        },
-        {
-            // DataTables sorting defaults to third click removing sorting. This sets it to asc/desc only
-            targets: 'sorting',
-            orderSequence: ['asc', 'desc']
         }
        ],
    initComplete: function () {
