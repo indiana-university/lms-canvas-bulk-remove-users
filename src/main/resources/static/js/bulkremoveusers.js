@@ -46,6 +46,17 @@ function userSelectedCounter() {
     }
 }
 
+// In FF, clicking enter when you are on a checkbox triggers a form submission. Listen for the submit
+// event and prevent submission if the submitter is null.
+// Per the web API spec, non-buttons will return a null value for submitter.
+const bruForm = document.getElementById("bulk-remove-users-form");
+bruForm.addEventListener('submit', function(event){
+    let submitter = event.submitter;
+    if (event.submitter == null) {
+        event.preventDefault();
+    }
+})
+
 $(".modalButton").click(function() {
     // find the modal body
     let modalList = $("#edit-tool-properties").find(".modal-list");
