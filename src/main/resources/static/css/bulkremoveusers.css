@@ -71,11 +71,3 @@
 .checkbox-left-padding-override {
     padding-left: 1.5rem;
 }
-
-th.sorting button {
-    border: none;
-    background: transparent;
-    width: 100%;
-    padding: 4px;
-    margin: 1px;
-}
