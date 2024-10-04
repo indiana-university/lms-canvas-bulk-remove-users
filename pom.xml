@@ -9,11 +9,11 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.7.17</version>
+        <version>3.2.10</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
-    <version>5.0.7-SNAPSHOT</version>
+    <version>6.0.0-SNAPSHOT</version>
     <description>Tool that helps bulk remove non-SIS enrollments in Canvas</description>
     <url>https://github.com/indiana-university/lms-canvas-bulk-remove-users</url>
     <inceptionYear>2022</inceptionYear>
@@ -54,25 +54,25 @@
 
     <properties>
         <app.version>${project.version}</app.version>
-        <datatables.version>2.0.3</datatables.version>
-        <datatables-select.version>2.0.0</datatables-select.version>
+        <datatables.version>2.1.0</datatables.version>
+        <datatables-select.version>2.0.5</datatables-select.version>
         <denodo-hibernate-dialect.version>8.0.20201021</denodo-hibernate-dialect.version>
         <denodo-jdbc.version>8.0.2</denodo-jdbc.version>
-        <git-commit-id-maven-plugin.version>8.0.2</git-commit-id-maven-plugin.version>
-        <hibernate5-ddl-maven-plugin.version>2.5.0</hibernate5-ddl-maven-plugin.version>
+        <git-commit-id-maven-plugin.version>9.0.1</git-commit-id-maven-plugin.version>
+        <hibernate6-ddl-maven-plugin.version>1.0.2</hibernate6-ddl-maven-plugin.version>
         <java.version>17</java.version>
         <jdk.source>17</jdk.source>
         <jdk.target>17</jdk.target>
         <jquery.version>3.7.1</jquery.version>
-        <lms-canvas-rivet.version>5.2.8.0</lms-canvas-rivet.version>
-        <lms-embedded-services.version>5.2.34</lms-embedded-services.version>
-        <lms-team-spring-boot-it12>5.4.7</lms-team-spring-boot-it12>
-        <spring-cloud.version>2021.0.9</spring-cloud.version>
+        <lms-canvas-rivet.version>6.2.8.1_1</lms-canvas-rivet.version>
+        <lms-embedded-services.version>6.0.2</lms-embedded-services.version>
+        <lms-team-spring-boot-it12>6.5.0</lms-team-spring-boot-it12>
+        <spring-cloud.version>2023.0.3</spring-cloud.version>
         <webjars-locator.version>0.52</webjars-locator.version>
 
         <plugins.compiler.version>3.13.0</plugins.compiler.version>
         <plugins.license.version>2.4.0</plugins.license.version>
-        <plugins.release.version>3.0.1</plugins.release.version>
+        <plugins.release.version>3.1.1</plugins.release.version>
     </properties>
 
     <dependencyManagement>
@@ -118,9 +118,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>edu.iu.uits.lms</groupId>
-            <artifactId>lms-canvas-redis-config</artifactId>
-            <version>${lms-embedded-services.version}</version>
+            <groupId>org.springframework.session</groupId>
+            <artifactId>spring-session-data-redis</artifactId>
         </dependency>
         <dependency>
             <groupId>edu.iu.uits.lms</groupId>
@@ -207,6 +206,12 @@
             <artifactId>datatables-select</artifactId>
             <version>${datatables-select.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-properties-migrator</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
     </dependencies>
 
 
@@ -251,8 +256,8 @@
             </plugin>
             <plugin>
                 <groupId>de.jpdigital</groupId>
-                <artifactId>hibernate54-ddl-maven-plugin</artifactId>
-                <version>${hibernate5-ddl-maven-plugin.version}</version>
+                <artifactId>hibernate65-ddl-maven-plugin</artifactId>
+                <version>${hibernate6-ddl-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -264,7 +269,7 @@
                 <configuration>
                     <dialects>
                         <param>h2</param>
-                        <param>postgresql9</param>
+                        <param>postgresql</param>
                     </dialects>
                     <packages>
                         <param>edu.iu.uits.lms.iuonly</param>

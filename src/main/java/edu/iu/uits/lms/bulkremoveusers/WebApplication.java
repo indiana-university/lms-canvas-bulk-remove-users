@@ -33,6 +33,7 @@ package edu.iu.uits.lms.bulkremoveusers;
  * #L%
  */
 
+import edu.iu.uits.lms.bulkremoveusers.config.ToolConfig;
 import edu.iu.uits.lms.canvas.config.EnableCanvasClient;
 import edu.iu.uits.lms.common.samesite.EnableCookieFilter;
 import edu.iu.uits.lms.common.server.GitRepositoryState;
@@ -41,8 +42,6 @@ import edu.iu.uits.lms.common.server.ServerUtils;
 import edu.iu.uits.lms.iuonly.config.EnableIuOnlyClient;
 import edu.iu.uits.lms.lti.config.EnableGlobalErrorHandler;
 import edu.iu.uits.lms.lti.config.EnableLtiClient;
-import edu.iu.uits.lms.bulkremoveusers.config.ToolConfig;
-import edu.iu.uits.lms.redis.config.EnableRedisConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -56,7 +55,6 @@ import java.util.Date;
 @SpringBootApplication
 @EnableGlobalErrorHandler
 @Slf4j
-@EnableRedisConfiguration
 @EnableCookieFilter(ignoredRequestPatterns = {"/rest/**"})
 @EnableLtiClient(toolKeys = "lms_bulkremoveusers")
 @EnableCanvasClient
