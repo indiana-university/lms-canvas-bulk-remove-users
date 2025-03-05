@@ -107,7 +107,7 @@ var table = $('#appTable').DataTable({
        }
    },
     lmsAlly: {
-        checkLabelTargetSelector: 'td.displayName'
+        checkLabelTargetSelector: '.displayName'
     },
    columnDefs: [
         {
@@ -136,7 +136,7 @@ var table = $('#appTable').DataTable({
        $('.search-wrapper label').addClass('rvt-label rvt-ts-16');
    },
    select: {
-        selector: 'th:first-child',
+        selector: 'td:first-child',
         style: 'multi',
         info: false
    },
@@ -160,3 +160,9 @@ table.on('select deselect user-select filter-update draw', function () {
     // The draw event catches the regular search filtering
     userSelectedCounter();
 });
+
+window.onload = function() {
+    // Rivet is forcing these attributes on the dropdowns, so remove them after everything has loaded
+    $('.rvt-dropdown__menu').removeAttr("role");
+    $('button[data-rvt-dropdown-toggle]').removeAttr("aria-haspopup");
+};
