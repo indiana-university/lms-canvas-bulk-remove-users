@@ -101,8 +101,8 @@
                 </thead>
                 <tbody>
                 <tr th:each="enrollmentDisplay : ${finalEnrollmentList}" th:data-is-dupe="${#arrays.contains(dupeUsernames, enrollmentDisplay.username)}">
-                    <th scope="row" class="checkboxColumn rowCheckbox" />
-                    <td th:text="${enrollmentDisplay.displayName}" class="displayName" th:id="|${enrollmentDisplay.enrollmentId}-name|">Banner, Bruce</td>
+                    <td class="checkboxColumn rowCheckbox" />
+                    <th scope="row" th:text="${enrollmentDisplay.displayName}" class="displayName" th:id="|${enrollmentDisplay.enrollmentId}-name|">Banner, Bruce</th>
                     <td th:text="${enrollmentDisplay.username}" class="username">bbanner</td>
                     <td th:text="${enrollmentDisplay.role}" class="role">Teacher</td>
                     <td th:text="${enrollmentDisplay.sectionName}" class="section">FA21-BL-CHEM-A123-12345</td>
