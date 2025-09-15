@@ -161,8 +161,3 @@ table.on('select deselect user-select filter-update draw', function () {
     userSelectedCounter();
 });
 
-window.onload = function() {
-    // Rivet is forcing these attributes on the dropdowns, so remove them after everything has loaded
-    $('.rvt-dropdown__menu').removeAttr("role");
-    $('button[data-rvt-dropdown-toggle]').removeAttr("aria-haspopup");
-};
