@@ -151,7 +151,7 @@ var table = $('#appTable').DataTable({
    }
 });
 
-$('#appTable thead').on('click', 'th button', function(e) {
+$(document).on('click', '#appTable thead th button', function(e) {
     e.stopPropagation();
     const th = $(this).closest('th');
     const table = $('#appTable').DataTable();
