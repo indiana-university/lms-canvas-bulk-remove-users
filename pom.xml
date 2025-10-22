@@ -55,7 +55,6 @@
     <properties>
         <app.version>${project.version}</app.version>
         <datatables.version>2.3.2</datatables.version>
-        <datatables-buttons.version>3.1.2</datatables-buttons.version>
         <datatables-select.version>2.1.0</datatables-select.version>
         <denodo-hibernate-dialect.version>8.0.20201021</denodo-hibernate-dialect.version>
         <denodo-jdbc.version>8.0.2</denodo-jdbc.version>
@@ -65,7 +64,7 @@
         <jdk.source>17</jdk.source>
         <jdk.target>17</jdk.target>
         <jquery.version>3.7.1</jquery.version>
-        <lms-canvas-rivet.version>6.2.9.0_1</lms-canvas-rivet.version>
+        <lms-canvas-rivet.version>6.2.9.1_1</lms-canvas-rivet.version>
         <lms-embedded-services.version>6.0.2</lms-embedded-services.version>
         <lms-team-spring-boot-it12>6.5.0</lms-team-spring-boot-it12>
         <spring-cloud.version>2023.0.3</spring-cloud.version>
@@ -201,11 +200,6 @@
             <groupId>org.webjars</groupId>
             <artifactId>datatables</artifactId>
             <version>${datatables.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>datatables-buttons</artifactId>
-            <version>${datatables-buttons.version}</version>
         </dependency>
         <dependency>
             <groupId>org.webjars</groupId>
