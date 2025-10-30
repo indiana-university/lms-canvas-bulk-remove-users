@@ -92,7 +92,7 @@ jobs:
     runs-on: self-hosted
     environment: ${{ github.event.inputs.server_env }}
     container:
-      image: registry.docker.iu.edu/library/kube-deployer:3.10.2
+      image: registry.docker.iu.edu/library/kube-deployer:stable
       credentials:
         username: ${{ secrets.LMS_REGISTRY_USERNAME }}
         password: ${{ secrets.LMS_REGISTRY_PASSWORD }}
