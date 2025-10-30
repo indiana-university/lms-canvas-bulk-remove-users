@@ -55,9 +55,7 @@ jobs:
     name: Maven Build
     runs-on: self-hosted
     container:
-      image: maven:3.9.11-eclipse-temurin-21
-      volumes:
-        - /opt/actions/cache/npm_cache/iu-uits-es/${{ vars.DEPLOY_DIR }}:/tmp/npm_cache
+      image: maven:3.9.9-eclipse-temurin-21
     environment: ${{ github.event.inputs.server_env }}
     steps:
       - name: Clone GitHub root repository
@@ -73,15 +71,9 @@ jobs:
           path: tools/${{ vars.DEPLOY_DIR }}
       - name: mvn setup
         run: mkdir /root/.m2
-      - name: NPM configuration
-        run: |
-          touch /tmp/.npmrc
-          echo 'cache=/tmp/npm_cache' >> /tmp/.npmrc
       - name: Create maven settings.xml
         run: echo -n '${{ secrets.LMS_MAVEN_SETTINGS }}' | base64 -d > /root/.m2/settings.xml
       - name: Maven Build
-        env:
-          NPM_CONFIG_GLOBALCONFIG: /tmp/.npmrc
         run: mvn clean install -B -P '${{ vars.BUILD_PROFILES}}'
         working-directory: tools/${{ vars.DEPLOY_DIR }}
       - name: copy jar file
