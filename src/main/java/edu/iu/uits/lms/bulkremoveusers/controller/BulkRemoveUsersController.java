@@ -140,7 +140,7 @@ public class BulkRemoveUsersController extends OidcTokenAwareController {
       Map<String, String> roleMap = getCanvasRoleMap(courseService.getCourse(courseId).getAccountId());
 
       // States of the desired enrollments
-      String[] states = {EnrollmentHelper.STATE.active.name(), EnrollmentHelper.STATE.invited.name()};
+      List<String> states = List.of(EnrollmentHelper.STATE.active.name(), EnrollmentHelper.STATE.invited.name());
 
       // Rules for being a valid enrollment to display for removal
       // 1. Can not be the current user

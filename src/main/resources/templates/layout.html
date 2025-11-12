@@ -41,6 +41,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link th:replace="~{commonFragments/favicon :: favicon}" />
     <link media="all" rel="stylesheet" type="text/css" th:href="@{/app/jsrivet/rivet-core/rivet.min.css}" />
     <link rel="stylesheet" type="text/css" th:href="@{/app/webjars/datatables/css/dataTables.dataTables.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{/app/webjars/datatables-select/css/select.dataTables.min.css}"/>
@@ -65,11 +66,7 @@
 
 </div>
 
-
-
-<footer th:unless="${hideFooter}" class="rvt-ts-12 rvt-container-xl rvt-m-top-lg">
-    <div id="footer" th:text="${@serverInfo}"></div>
-</footer>
+<div th:replace="~{commonFragments/layouts :: footer(${hideFooter}, ${@serverInfo.elements})}" ></div>
 
 <script type="text/javascript" th:src="@{/app/jsrivet/rivet-core/rivet.min.js}"></script>
 <script type="text/javascript" th:src="@{/app/webjars/jquery/jquery.min.js}"></script>
