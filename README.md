@@ -63,6 +63,7 @@ They can be set in a properties file, or overridden as environment variables.
 | Property             | Default Value               | Description                                               |
 |----------------------|-----------------------------|-----------------------------------------------------------|
 | `canvas.host`        |                             | Hostname of the Canvas instance                           |
+| `canvas.sso.host`    |                             | Hostname of the Canvas OIDC auth domain                   |
 | `canvas.baseUrl`     | https://`${canvas.host}`    | Base URL of the Canvas instance                           |
 | `canvas.baseApiUrl`  | `${canvas.baseUrl}`/api/v1  | Base URL for the Canvas API                               |
 | `canvas.token`       |                             | Token for access to Canvas instance                       |
@@ -117,6 +118,18 @@ They can be set in a properties file, or overridden as environment variables.
 ### Vault Configuration (optional)
 If you would like to use HashiCorp's Vault for secure property storage, you will need to enable it by including the value `vault` into the `SPRING_PROFILES_ACTIVE` environment variable. Be aware that if the tool requires multiple values, that there could be more than one profile value in there.
 Include any `spring.cloud.vault.*` properties that your environment requires in a properties file, or override as environment variables.
+
+### Favicon.ico Configuration (optional)
+If you would like to use a favicon.ico file for your application, it can be enabled with the following properties in the table below.
+
+| Property              | Default Value  | Description                                                                                                                                                                       |
+|-----------------------|----------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `lms.favicon.enabled` | `false`        | Enable favicon                                                                                                                                                                    |
+| `lms.favicon.url`     |                | URL of externally hosted favicon.  Will be the preferred value if both url and path are set.                                                                                      |
+| `lms.favicon.path`    | `/favicon.ico` | Path of favicon that is hosted by the application.  There is a default image in the classpath (IU Trident). Can be overridden with an image placed in `src/main/resources/static` |
+
+### Footer Branding Configuration (optional)
+This is off by default, but can be enabled by setting the `lms.footer.branding.enabled` property to `true`.
 
 ### Exposing the LTI authz REST endpoints
 If you would like to expose the LTI authz endpoints in this tool (for CRUD operations on the LTI authorizations), you will
