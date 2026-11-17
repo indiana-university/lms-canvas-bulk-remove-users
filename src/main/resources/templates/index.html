@@ -88,7 +88,7 @@
                 <caption class="rvt-sr-only">Table of users enrolled in course. Select users to remove, then click Remove Selected Users to remove them from the course. Column headers are sortable.</caption>
                 <thead>
                 <tr>
-                    <td class="checkboxColumn colCheckbox" />
+                    <td class="checkboxColumn colCheckbox"></td>
                     <th scope="col" class="colName"><button type="button">Name</button></th>
                     <th scope="col" class="colUsername"><button type="button">Username</button></th>
                     <th scope="col" class="colRole"><button type="button">Role</button></th>
@@ -141,12 +141,8 @@
                 </div>
                 <div class="rvt-dialog__controls">
                     <button id="dialog-cancel" type="button" class="rvt-button rvt-button--secondary" data-rvt-dialog-close="edit-tool-properties">Cancel</button>
-                    <button id="dialog-submit" type="submit" class="rvt-button">
-                        <span class="rvt-button__content">Yes, remove</span>
-                        <div id="remove-users-loader" class="rvt-loader rvt-loader--xs rvt-display-none"></div>
-                        <span aria-live="polite">
-                            <span id="remove-users-sr-text" class="rvt-sr-only rvt-display-none">Removing users</span>
-                        </span>
+                    <button id="dialog-submit" type="submit" class="rvt-button" onclick="buttonLoading(this)" data-form-id="bulk-remove-users-form">
+                        <span th:replace="~{fragments/loadingButton.html :: loadingButton(buttonText='Yes, remove', srText='Removing users')}"></span>
                     </button>
                 </div>
             </div>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Bulk Remove Users</title>
+</head>
+<body>
+    <span th:fragment="loadingButton (buttonText, srText)">
+        <span class="rvt-button__content" th:text="${buttonText}">Continue</span>
+        <span class="rvt-loader rvt-loader--xs rvt-display-none"></span>
+        <span class="loading-text-container" aria-live="polite">
+            <span class="sr-loader-text rvt-display-none rvt-sr-only" th:text="${srText}">Loading</span>
+        </span>
+    </span>
+</body>
+</html>
