@@ -2,7 +2,7 @@
  * #%L
  * bulk-remove-users
  * %%
- * Copyright (C) 2022 Indiana University
+ * Copyright (C) 2022 - 2026 Indiana University
  * %%
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -71,8 +71,8 @@ $(".modalButton").click(function() {
 
 function buttonLoading(button, formSubmit = true) {
     button.setAttribute("aria-busy", true);
-    var buttonsToDisable = document.getElementsByTagName('button');
-    for(var i = 0; i < buttonsToDisable.length; i++) {
+    let buttonsToDisable = document.getElementsByTagName('button');
+    for(let i = 0; i < buttonsToDisable.length; i++) {
         buttonsToDisable[i].disabled = true;
     }
     button.classList.add("rvt-button--loading");
