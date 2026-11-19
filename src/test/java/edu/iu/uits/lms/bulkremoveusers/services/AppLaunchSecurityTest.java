@@ -4,7 +4,7 @@ package edu.iu.uits.lms.bulkremoveusers.services;
  * #%L
  * bulk-remove-users
  * %%
- * Copyright (C) 2022 Indiana University
+ * Copyright (C) 2022 - 2026 Indiana University
  * %%
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -51,10 +51,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
@@ -63,6 +62,7 @@ import org.springframework.web.context.WebApplicationContext;
 import uk.ac.ox.ctl.lti13.security.oauth2.client.lti.authentication.OidcAuthenticationToken;
 
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -113,10 +113,9 @@ public class AppLaunchSecurityTest {
    public void appAuthnWrongContextLaunch() throws Exception {
       OidcAuthenticationToken token = TestUtils.buildToken("userId", "asdf", LTIConstants.INSTRUCTOR_AUTHORITY);
 
-      SecurityContextHolder.getContext().setAuthentication(token);
-
       ServletException t = Assertions.assertThrows(ServletException.class, () ->
               mvc.perform(get("/app/index/1234")
+                      .with(authentication(token))
                       .header(HttpHeaders.USER_AGENT, TestUtils.defaultUseragent())
                       .contentType(MediaType.APPLICATION_JSON))
       );
@@ -129,14 +128,13 @@ public class AppLaunchSecurityTest {
    public void appAuthnLaunch() throws Exception {
       OidcAuthenticationToken token = TestUtils.buildToken("userId", "1234", LTIConstants.INSTRUCTOR_AUTHORITY);
 
-      SecurityContextHolder.getContext().setAuthentication(token);
-
       Course course = new Course();
       course.setAccountId("1234");
       Mockito.when(courseService.getCourse(anyString())).thenReturn(course);
 
       //This is a secured endpoint and should not allow access without authn
       mvc.perform(get("/app/index/1234")
+            .with(authentication(token))
             .header(HttpHeaders.USER_AGENT, TestUtils.defaultUseragent())
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
@@ -155,10 +153,9 @@ public class AppLaunchSecurityTest {
    public void randomUrlWithAuth() throws Exception {
       OidcAuthenticationToken token = TestUtils.buildToken("userId", "1234", LTIConstants.INSTRUCTOR_AUTHORITY);
 
-      SecurityContextHolder.getContext().setAuthentication(token);
-
       //This is a secured endpoint and should not allow access without authn
       mvc.perform(get("/asdf/foobar")
+            .with(authentication(token))
             .header(HttpHeaders.USER_AGENT, TestUtils.defaultUseragent())
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());

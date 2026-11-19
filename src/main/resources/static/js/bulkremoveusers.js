@@ -2,7 +2,7 @@
  * #%L
  * bulk-remove-users
  * %%
- * Copyright (C) 2022 Indiana University
+ * Copyright (C) 2022 - 2026 Indiana University
  * %%
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted provided that the following conditions are met:
@@ -69,22 +69,35 @@ $(".modalButton").click(function() {
     });
 });
 
-$('#dialog-submit').click(function() {
-    // set all the loading icon things for the 'Yes, remove' button
-    let button = $(this);
-    button.addClass("rvt-button--loading");
-    button.prop('disabled', 'true');
-    button.attr('aria-busy', 'true');
-    $("#remove-users-loader").removeClass("rvt-display-none");
-    $("#remove-users-sr-text").removeClass("rvt-display-none");
+function buttonLoading(button, formSubmit = true) {
+    button.setAttribute("aria-busy", true);
+    let buttonsToDisable = document.getElementsByTagName('button');
+    for(let i = 0; i < buttonsToDisable.length; i++) {
+        buttonsToDisable[i].disabled = true;
+    }
+    button.classList.add("rvt-button--loading");
+    let spinners = button.getElementsByClassName('rvt-loader');
+    if (spinners && spinners.length > 0) {
+        spinners[0].classList.remove("rvt-display-none");
+    }
 
-    // disable the cancel button
-    $("#dialog-cancel").attr('disabled', '');
-    $("#dialog-cancel").attr('aria-disabled', 'true');
+    let srText = button.getElementsByClassName('sr-loader-text');
+    if (srText && srText.length > 0) {
+        srText[0].classList.remove("rvt-display-none");
+    }
 
-    // Some browsers need this to have submissions work correctly
-    $('#bulk-remove-users-form').submit();
-});
+    if (formSubmit) {
+        // FF doesn't need this, but Chrome and Edge do
+        // Also, Rivet 2 moves the dialog out of the form ¯\_(ツ)_/¯ so we have to manually get the form by id
+        if (button.form) {
+            button.form.submit();
+        } else {
+            // the form id will be found in a data attribute
+            const formId = button.dataset.formId;
+            document.getElementById(formId).submit();
+        }
+    }
+}
 
 // Customize a few of the search input related wrapper classes
 DataTable.ext.classes.search.input = 'rvt-m-left-xs';

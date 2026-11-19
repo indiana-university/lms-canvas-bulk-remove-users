@@ -3,7 +3,7 @@
   #%L
   bulk-remove-users
   %%
-  Copyright (C) 2022 Indiana University
+  Copyright (C) 2022 - 2026 Indiana University
   %%
   Redistribution and use in source and binary forms, with or without modification,
   are permitted provided that the following conditions are met:
@@ -66,7 +66,9 @@
 
 </div>
 
-<div th:replace="~{commonFragments/layouts :: footer(${hideFooter}, ${@serverInfo.elements})}" ></div>
+<th:block th:with="serverInfoElements=${@serverInfo.elements}">
+    <div th:replace="~{commonFragments/layouts :: footer(${hideFooter}, ${serverInfoElements})}"></div>
+</th:block>
 
 <script type="text/javascript" th:src="@{/app/jsrivet/rivet-core/rivet.min.js}"></script>
 <script type="text/javascript" th:src="@{/app/webjars/jquery/jquery.min.js}"></script>
